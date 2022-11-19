@@ -1,6 +1,6 @@
-export default class ApplicationError extends Error {
+export default class ApplicationError extends Error { //error u c# je Exception class.
     static type = {
-      APP_NAME: "PETNATION",
+      APP_NAME: "SocialQnA",
       INTERNAL: "INTERNAL",
       NETWORK: "NETWORK",
       UNKNOWN: "UNKNOWN",

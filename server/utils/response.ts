@@ -1,6 +1,6 @@
 import ApplicationError from "./error/application.error"
 import { createError } from "./error/factory.error"
-
+//rucno pravljen fajl;imamo statuse konkrente informacije sa podacima;
 export function sendResponse(res: any, payload: any, statusCode = 200) {
   if (payload instanceof ApplicationError) {
     const code = payload.statusCode || 500;
@@ -37,7 +37,7 @@ export function formatError(error: any) {
         success: false,
     }
 }
-
+//const i let >>> var zbog hoisting-a i gresaka; bolja praksa;
 export const setTokenInCookie = (res: any, token: string, time: string | number) => {
     res.cookie('token', token, 
     {

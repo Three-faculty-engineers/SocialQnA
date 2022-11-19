@@ -1,6 +1,6 @@
 import ApplicationError from "./application.error";
 
-export const httpErrorTypes = {
+export const httpErrorTypes = { //moze httpErrorTypes.(UNAUTHORIZED) ili httpErrorTypes(UNAUTHORIZED); Literal object.(i kao object i kao dictionary)
   UNKNOWN_ERROR: {
     type: ApplicationError.type.APP_NAME,
     code: "UNKNOWN_ERROR",
