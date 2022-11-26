@@ -1,17 +1,16 @@
+import { Comment } from "./Comment";
+import { Community } from "./Community";
 import { IModel } from "./IModel";
+import { User } from "./User";
 
-export class Post implements IModel
+export interface Post extends IModel
 {
-    id: number;
+    title: string;
     text: string;
-    likesCount: number;
     timeStamp: Date;
-
-    constructor(id: number, text: string, likesCount: number, timeStamp: Date)
-    {
-        this.id = id;
-        this.text = text;
-        this.likesCount = likesCount;
-        this.timeStamp = timeStamp;
-    }
+    author: User;
+    community: Community;
+    userLikes?: User[];
+    userDislikes?: User[];  
+    comments?: Comment[];
 }

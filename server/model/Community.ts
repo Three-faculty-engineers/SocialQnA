@@ -1,13 +1,12 @@
 import { IModel } from "./IModel";
+import { Post } from "./Post";
+import { User } from "./User";
 
-export class Community implements IModel
+export interface Community extends IModel
 {
-    id: number;
     title: string;
-
-    constructor(id: number, title: string)
-    {
-        this.id = id;
-        this.title = title;
-    }
+    description: string;
+    image_url: string;
+    posts?: Post[];
+    followingUsers?: User[];
 }

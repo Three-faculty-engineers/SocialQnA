@@ -1,4 +1,4 @@
 export interface IModel
 {
-    private id: number
+    id: number;
 }
