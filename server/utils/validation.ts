@@ -46,12 +46,6 @@ export const loginSchema = z.object({
 })
 
 export const updateUserSchema = z.object({
-    email: z.string({
-        required_error: "Email is required!"
-    }).email({
-        message: "Email is in wrong format!"
-    }),
-
     password: z.string({
         required_error: "Password is required!"
     }).min(6, {
@@ -63,4 +57,18 @@ export const updateUserSchema = z.object({
     }).min(3, {
         message: "Username must be greater then 3 characters"
     }).optional(),
+})
+
+export const postCreateSchema = z.object({
+    title: z.string({
+        required_error: "Title is required!"
+    }),
+    text: z.string({
+        required_error: "Text is required!"
+    })
+})
+
+export const postUpdateSchema = z.object({
+    title: z.string().optional(),
+    text: z.string().optional()
 })
