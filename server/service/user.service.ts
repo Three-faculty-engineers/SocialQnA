@@ -11,7 +11,7 @@ export class UserService extends BaseService {
 
         user.password = await hashValue(user.password);
 
-        const query = `CREATE (n:Users {username:$username, email:$email, password:$password}) RETURN n`;
+        const query = `CREATE (n:Users {id:randomUUID(), username:$username, email:$email, password:$password}) RETURN n`;
 
         const result = this.getRecordDataFromNeo(await session.run(query, user));
 
@@ -22,26 +22,26 @@ export class UserService extends BaseService {
         return result;
     }
 
-    async get(email: string)
+    async get(id: string)
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (n:Users) WHERE n.email =~ $email RETURN n`;
+        const query = `MATCH (n:Users) WHERE n.id = $id RETURN n`;
 
-        const result = this.getRecordDataFromNeo(await session.run(query, { email }));
+        const result = this.getRecordDataFromNeo(await session.run(query, { id }));
 
         session.close();
 
         return result;
     }
 
-    async delete(email: string)
+    async delete(id: string)
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (n:Users {email: $email}) DELETE n`;
+        const query = `MATCH (n:Users {id: $id}) DELETE n`;
 
-        const result = this.getRecordDataFromNeo(await session.run(query, {email}));
+        const result = this.getRecordDataFromNeo(await session.run(query, {id}));
 
         session.close();
 
@@ -56,7 +56,7 @@ export class UserService extends BaseService {
             user.password = await hashValue(user.password);
         }
 
-        const query = `MATCH (n: Users {email: $email})
+        const query = `MATCH (n: Users {id: $id})
         SET ${Object.getOwnPropertyNames(user).map(prop => `n.${prop} = $${prop}`)}
         RETURN n
         `

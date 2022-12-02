@@ -1,4 +1,4 @@
 export interface IModel
 {
-    id: number;
+    id: string;
 }

@@ -54,10 +54,10 @@ export class UserController {
     async delete(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const email = req.params.email;
-            if(!email) throw new ApplicationError({...httpErrorTypes.BAD_REQUEST, message: "Email is required"});
+            const id = req.params.id;
+            if(!id) throw new ApplicationError({...httpErrorTypes.BAD_REQUEST, message: "ID is required"});
 
-            await userService.delete(email);
+            await userService.delete(id);
 
             return sendResponse(res, {message: "User deleted!"});
         } catch (error) {
@@ -70,7 +70,7 @@ export class UserController {
         try {
             const user = req.body as User;
 
-            user.email = req.params.email;
+            user.id = req.params.id;
 
             await updateUserSchema.parseAsync(user);
 
@@ -85,11 +85,13 @@ export class UserController {
     async get(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const email = req.params.email;
+            const id = req.params.id;
 
-            const result = await userService.get(email);
+            const result = await userService.get(id);
+            
+            if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result);
+            return sendResponse(res, result[0]);
         } catch (error) {
             next(error);
         }
