@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { CreatePostDto, UpdatePostDto } from "../dto/post.dto";
 import { Post } from "../model/Post";
 import { PostService } from "../service/post.service";
 import ApplicationError from "../utils/error/application.error";
@@ -28,7 +29,7 @@ export class PostController {
     async create(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const post = req.body as Post;
+            const post = req.body as CreatePostDto;
 
             await postCreateSchema.parseAsync(post);
 
@@ -56,7 +57,7 @@ export class PostController {
     async update(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const post = req.body as Post;
+            const post = req.body as UpdatePostDto;
 
             post.id = req.params.id;
 

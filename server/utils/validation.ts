@@ -60,6 +60,9 @@ export const updateUserSchema = z.object({
 })
 
 export const postCreateSchema = z.object({
+    userID: z.string({
+        required_error: "User ID is required!"
+    }),
     title: z.string({
         required_error: "Title is required!"
     }),

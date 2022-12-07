@@ -1,14 +1,14 @@
-import { Post } from "../model/Post";
+import { CreatePostDto, UpdatePostDto } from "../dto/post.dto";
 import ApplicationError from "../utils/error/application.error";
 import { httpErrorTypes } from "../utils/error/types.error";
 import { BaseService } from "./base.service";
 
 export class PostService extends BaseService {
-    async create(post: Post)
+    async create(post: CreatePostDto)
     {
         const session = this.neo4jDriver.session();
 
-        const query = `CREATE (n:Posts {id:randomUUID(), title: $title, text: $text, timeStamp: dateTime()}) RETURN n`;
+        const query = `MATCH (n: Users {id: $userID}) CREATE (n) -[r: posted]-> (p: Posts {id:randomUUID(), title: $title, text: $text, timeStamp: dateTime()}) RETURN p;`
 
         const result = this.getRecordDataFromNeo(await session.run(query, post));
 
@@ -45,7 +45,7 @@ export class PostService extends BaseService {
         return result;
     }
 
-    async update(post: Post)
+    async update(post: UpdatePostDto)
     {
         const session = this.neo4jDriver.session();
 
