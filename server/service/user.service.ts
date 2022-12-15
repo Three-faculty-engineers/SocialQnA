@@ -1,3 +1,4 @@
+import { UserFollowCommunityDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
 import { User } from "../model/User";
 import { hashValue } from "../utils/crypt";
 import ApplicationError from "../utils/error/application.error";
@@ -35,6 +36,19 @@ export class UserService extends BaseService {
         return result;
     }
 
+    async getFromEmail(email: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `MATCH (n:Users) WHERE n.email = $email RETURN n`;
+
+        const result = this.getRecordDataFromNeo(await session.run(query, { email }));
+
+        session.close();
+
+        return result;
+    }
+
     async delete(id: string)
     {
         const session = this.neo4jDriver.session();
@@ -61,6 +75,101 @@ export class UserService extends BaseService {
         RETURN n
         `
         const result = this.getRecordDataFromNeo(await session.run(query, user));
+
+        session.close();
+
+        return result;
+    }
+
+    async likePost(payload: UserLikePostDto)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users),
+            (p: Posts)
+        WHERE u.id = $userID AND p.id = $postID
+        CREATE (u)-[r:likes]->(p)
+        RETURN type(r)
+        `
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+
+        session.close();
+
+        return result;
+    }
+
+    async dislikePost(payload: UserLikePostDto)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users),
+            (p: Posts)
+        WHERE u.id = $userID AND p.id = $postID
+        CREATE (u)-[r:dislikes]->(p)
+        RETURN type(r)
+        `
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+
+        session.close();
+
+        return result;
+    }
+
+    async likeComment(payload: UserLikeCommentDto)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users),
+            (c: Comments)
+        WHERE u.id = $userID AND c.id = $commentID
+        CREATE (u)-[r:likes]->(c)
+        RETURN type(r)
+        `
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+
+        session.close();
+
+        return result;
+    }
+
+    async dislikeComment(payload: UserLikeCommentDto)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users),
+            (c: Comments)
+        WHERE u.id = $userID AND c.id = $commentID
+        CREATE (u)-[r:dislikes]->(c)
+        RETURN type(r)
+        `
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+
+        session.close();
+
+        return result;
+    }
+
+    async followCommunity(payload: UserFollowCommunityDto)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users),
+            (c: Communities)
+        WHERE u.id = $userID AND c.id = $communityID
+        CREATE (u)-[r:follows]->(c)
+        RETURN type(r)
+        `
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
         session.close();
 

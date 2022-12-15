@@ -68,4 +68,30 @@ export class PostController {
             next(error);
         }
     }
+
+    async getByUserID(req:Request, res: Response, next: NextFunction)
+    {
+        try {
+            const userID = req.params.userID;
+
+            const result = await postService.getByUserID(userID);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getByCommunityID(req:Request, res: Response, next: NextFunction)
+    {
+        try {
+            const communityID = req.params.communityID;
+
+            const result = await postService.getByCommunityID(communityID);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { UserFollowCommunityDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
 import { User } from "../model/User";
 import { UserService } from "../service/user.service";
 import { compareValues } from "../utils/crypt";
@@ -22,30 +23,6 @@ export class UserController {
             const payload = await userService.create(user);
 
             return sendResponse(res, payload);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async login(req: Request, res: Response, next: NextFunction)
-    {
-        try {
-            await loginSchema.parseAsync(req.body);
-            const user = req.body as User;
-
-            const userFromDB = (await userService.get(user.email))[0] as User;
-
-            if(!userFromDB) {
-                throw new ApplicationError(httpErrorTypes.UNAUTHORIZED);
-            }
-
-            if(!(await compareValues(user.password, userFromDB.password))) {
-                throw new ApplicationError(httpErrorTypes.UNAUTHORIZED);
-            }
-
-            const token = signToken(userFromDB, "1d");
-
-            return sendResponse(res, token);
         } catch (error) {
             next(error);
         }
@@ -90,6 +67,79 @@ export class UserController {
             const result = await userService.get(id);
             
             if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, result[0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async likePost(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const payload = req.body as UserLikePostDto;
+
+            const result = await userService.likePost(payload);
+            
+            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, result[0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async dislikePost(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const payload = req.body as UserLikePostDto;
+
+            const result = await userService.dislikePost(payload);
+            
+            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, result[0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async likeComment(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const payload = req.body as UserLikeCommentDto;
+
+            const result = await userService.likeComment(payload);
+            
+            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, result[0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async dislikeComment(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const payload = req.body as UserLikeCommentDto;
+
+            const result = await userService.dislikeComment(payload);
+            
+            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, result[0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async followCommunity(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const payload = req.body as UserFollowCommunityDto;
+
+            const result  = await userService.followCommunity(payload);
 
             return sendResponse(res, result[0]);
         } catch (error) {

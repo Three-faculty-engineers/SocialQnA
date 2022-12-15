@@ -1,4 +1,5 @@
 import { CreatePostDto, UpdatePostDto } from "../dto/post.dto";
+import { Post } from "../model/Post";
 import ApplicationError from "../utils/error/application.error";
 import { httpErrorTypes } from "../utils/error/types.error";
 import { BaseService } from "./base.service";
@@ -59,5 +60,31 @@ export class PostService extends BaseService {
         session.close();
 
         return result;
+    }
+
+    async getByUserID(userID: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts) RETURN p`
+
+        const result = this.getRecordDataFromNeo(await session.run(query, {userID}));
+
+        session.close();
+
+        return result as Post[];
+    }
+
+    async getByCommunityID(communityID: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `MATCH (c: Communities {id: $communityID}) -[:has]-> (p: Posts) RETURN p`
+
+        const result = this.getRecordDataFromNeo(await session.run(query, {communityID}));
+
+        session.close();
+
+        return result as Post[];
     }
 }
