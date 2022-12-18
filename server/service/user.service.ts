@@ -85,12 +85,20 @@ export class UserService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
+        // const query = `
+        // MATCH
+        //     (u: Users),
+        //     (p: Posts)
+        // WHERE u.id = $userID AND p.id = $postID
+        // CREATE (u)-[r:like]->(ulp: UserLikePost{id: randomUUID(), createdAt: dateTime()})<-[l:like]-(p)
+        // RETURN type(r)
+        // `
         const query = `
         MATCH
             (u: Users),
             (p: Posts)
         WHERE u.id = $userID AND p.id = $postID
-        CREATE (u)-[r:likes]->(p)
+        CREATE (u)-[r:likes {createdAt: dateTime()}]->(p)
         RETURN type(r)
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
