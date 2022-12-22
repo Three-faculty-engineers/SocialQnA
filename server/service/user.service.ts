@@ -1,4 +1,4 @@
-import { UserFollowCommunityDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
+import { UserFollowCommunityDto, UserFollowUserDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
 import { User } from "../model/User";
 import { hashValue } from "../utils/crypt";
 import ApplicationError from "../utils/error/application.error";
@@ -117,7 +117,7 @@ export class UserService extends BaseService {
             (u: Users),
             (p: Posts)
         WHERE u.id = $userID AND p.id = $postID
-        CREATE (u)-[r:dislikes]->(p)
+        CREATE (u)-[r:dislikes {createdAt: dateTime()}]->(p)
         RETURN type(r)
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
@@ -136,7 +136,7 @@ export class UserService extends BaseService {
             (u: Users),
             (c: Comments)
         WHERE u.id = $userID AND c.id = $commentID
-        CREATE (u)-[r:likes]->(c)
+        CREATE (u)-[r:likes {createdAt: dateTime()}]->(c)
         RETURN type(r)
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
@@ -155,7 +155,7 @@ export class UserService extends BaseService {
             (u: Users),
             (c: Comments)
         WHERE u.id = $userID AND c.id = $commentID
-        CREATE (u)-[r:dislikes]->(c)
+        CREATE (u)-[r:dislikes {createdAt: dateTime()}]->(c)
         RETURN type(r)
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
@@ -174,7 +174,26 @@ export class UserService extends BaseService {
             (u: Users),
             (c: Communities)
         WHERE u.id = $userID AND c.id = $communityID
-        CREATE (u)-[r:follows]->(c)
+        CREATE (u)-[r:follows {createdAt: dateTime()}]->(c)
+        RETURN type(r)
+        `
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+
+        session.close();
+
+        return result;
+    }
+
+    async followUser(payload: UserFollowUserDto)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users),
+            (uf: Users)
+        WHERE u.id = $userFollowID AND uf.id = $userFollowingID
+        CREATE (u)-[r:follows {createdAt: dateTime()}]->(uf)
         RETURN type(r)
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));

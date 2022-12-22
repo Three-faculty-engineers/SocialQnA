@@ -4,7 +4,7 @@ import { User } from "./User";
 
 export interface UserEditedComment extends IModel
 {
-    user: User,
-    comment: Comment,
-    LastModified: Timestamp
+    user: User;
+    comment: Comment;
+    lastModified: Date;
 }

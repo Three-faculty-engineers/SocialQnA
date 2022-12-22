@@ -16,3 +16,8 @@ export interface UserFollowCommunityDto {
     userID: string;
     communityID: string;
 }
+
+export interface UserFollowUserDto {
+    userFollowID: string;
+    userFollowingID: string;
+}

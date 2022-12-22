@@ -9,7 +9,13 @@ export class PostService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (n: Users {id: $userID}) CREATE (n) -[r: posted]-> (p: Posts {id:randomUUID(), title: $title, text: $text, timeStamp: dateTime()}) RETURN p;`
+        const query = `MATCH 
+            (n: Users {id: $userID}) 
+            (c: Communities)
+        CREATE (n) -[r: posted]-> 
+        (p: Posts {id:randomUUID(), title: $title, text: $text, timeStamp: dateTime()}) 
+        <-[h: has_post]- (c)
+        RETURN p;`
 
         const result = this.getRecordDataFromNeo(await session.run(query, post));
 
