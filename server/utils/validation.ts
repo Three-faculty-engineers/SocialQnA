@@ -75,3 +75,17 @@ export const postUpdateSchema = z.object({
     title: z.string().optional(),
     text: z.string().optional()
 })
+
+export const communityCreateScheme = z.object({
+    title: z.string({
+        required_error: "Title is required!"
+    }),
+    description: z.string({
+        required_error: "Description is required!"
+    })
+})
+
+export const communityUpdateScheme = z.object({
+    title: z.string().optional(),
+    description: z.string().optional()
+})
