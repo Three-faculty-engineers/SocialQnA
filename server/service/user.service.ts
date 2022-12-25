@@ -84,22 +84,18 @@ export class UserService extends BaseService {
     async likePost(payload: UserLikePostDto)
     {
         const session = this.neo4jDriver.session();
-
-        // const query = `
-        // MATCH
-        //     (u: Users),
-        //     (p: Posts)
-        // WHERE u.id = $userID AND p.id = $postID
-        // CREATE (u)-[r:like]->(ulp: UserLikePost{id: randomUUID(), createdAt: dateTime()})<-[l:like]-(p)
-        // RETURN type(r)
-        // `
+        
         const query = `
         MATCH
             (u: Users),
             (p: Posts)
         WHERE u.id = $userID AND p.id = $postID
-        CREATE (u)-[r:likes {createdAt: dateTime()}]->(p)
-        RETURN type(r)
+        MERGE (u)-[r:likes]->(p)
+        ON MATCH SET r.toDelete = true
+        ON CREATE SET r.createdAt = datetime()
+        WITH r
+        WHERE r.toDelete
+        DELETE r
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
@@ -117,8 +113,12 @@ export class UserService extends BaseService {
             (u: Users),
             (p: Posts)
         WHERE u.id = $userID AND p.id = $postID
-        CREATE (u)-[r:dislikes {createdAt: dateTime()}]->(p)
-        RETURN type(r)
+        MERGE (u)-[r:dislikes]->(p)
+        ON MATCH SET r.toDelete = true
+        ON CREATE SET r.createdAt = datetime()
+        WITH r
+        WHERE r.toDelete
+        DELETE r
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
@@ -136,8 +136,12 @@ export class UserService extends BaseService {
             (u: Users),
             (c: Comments)
         WHERE u.id = $userID AND c.id = $commentID
-        CREATE (u)-[r:likes {createdAt: dateTime()}]->(c)
-        RETURN type(r)
+        MERGE (u)-[r:likes]->(c)
+        ON MATCH SET r.toDelete = true
+        ON CREATE SET r.createdAt = datetime()
+        WITH r
+        WHERE r.toDelete
+        DELETE r
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
@@ -155,8 +159,12 @@ export class UserService extends BaseService {
             (u: Users),
             (c: Comments)
         WHERE u.id = $userID AND c.id = $commentID
-        CREATE (u)-[r:dislikes {createdAt: dateTime()}]->(c)
-        RETURN type(r)
+        MERGE (u)-[r:dislikes]->(c)
+        ON MATCH SET r.toDelete = true
+        ON CREATE SET r.createdAt = datetime()
+        WITH r
+        WHERE r.toDelete
+        DELETE r
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
@@ -174,8 +182,12 @@ export class UserService extends BaseService {
             (u: Users),
             (c: Communities)
         WHERE u.id = $userID AND c.id = $communityID
-        CREATE (u)-[r:follows {createdAt: dateTime()}]->(c)
-        RETURN type(r)
+        MERGE (u)-[r:follows]->(c)
+        ON MATCH SET r.toDelete = true
+        ON CREATE SET r.createdAt = datetime()
+        WITH r
+        WHERE r.toDelete
+        DELETE r
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
@@ -193,8 +205,12 @@ export class UserService extends BaseService {
             (u: Users),
             (uf: Users)
         WHERE u.id = $userFollowID AND uf.id = $userFollowingID
-        CREATE (u)-[r:follows {createdAt: dateTime()}]->(uf)
-        RETURN type(r)
+        MERGE (u)-[r:follows]->(uf)
+        ON MATCH SET r.toDelete = true
+        ON CREATE SET r.createdAt = datetime()
+        WITH r
+        WHERE r.toDelete
+        DELETE r
         `
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
