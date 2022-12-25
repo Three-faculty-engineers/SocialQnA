@@ -1,9 +1,9 @@
 import { API_URL } from "../config";
 import { fetchResult } from "../utils/fetch.helper";
-import { AuthLoginDto, AuthRegisterDto } from "./auth.dto";
+import { AuthLoginDto, AuthRegisterDto } from "../auth/auth.dto";
 
 const BASE_URL = `${API_URL}/auth`;
-const USER_BASE_URL = `${API_URL}/user`
+const USER_BASE_URL = `${API_URL}/user`;
 
 export async function login(payload: AuthLoginDto)
 {

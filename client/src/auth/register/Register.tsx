@@ -7,7 +7,7 @@ import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
 import { Alerts } from "../../common/Alerts";
 import { getFormData } from "../../utils/form.helper";
-import { register } from "../auth.service";
+import { register } from "../../service/auth.service";
 
 export function Register() {
     const [alerts, setAlerts] = useState([] as string[]);
@@ -29,7 +29,7 @@ export function Register() {
             setAlerts(data.error.issues.map((issue: { message: any; }) => issue.message));
             return;
         }
-    } 
+    }
 
     return (
       <div>

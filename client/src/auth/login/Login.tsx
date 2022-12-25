@@ -5,12 +5,14 @@ import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
+import { useNavigate } from "react-router-dom";
 import { Alerts } from "../../common/Alerts";
 import { getFormData } from "../../utils/form.helper";
-import { login } from "../auth.service";
+import { login } from "../../service/auth.service";
 
 export default function Login() {
   const [alerts, setAlerts] = useState([] as string[]);
+  const navigate = useNavigate();
 
   async function handleOnSubmit(e:any) {
     e.preventDefault();
@@ -23,11 +25,14 @@ export default function Login() {
     })
 
     if(!data.success) {
-      setAlerts(data.error.issues.map((issue: { message: any; }) => issue.message));
+      const errors = data.error.issues || [{message: data.error.message}];
+      setAlerts(errors.map((issue: { message: string; }) => issue.message));
       return;
     }
 
     localStorage.setItem("token", data.data);
+
+    return navigate("/home");
   }
 
   return (
