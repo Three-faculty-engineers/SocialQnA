@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
-export const signToken = ({email}: {email: string}, time: string | number) => {
-    return jwt.sign({ email }, process.env.JWT_SECRET_KEY!, {
+export const signToken = ({email, id}: {email: string, id: string}, time: string | number) => {
+    return jwt.sign({ email, id }, process.env.JWT_SECRET_KEY!, {
         expiresIn: time
     });
 }

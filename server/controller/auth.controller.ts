@@ -11,6 +11,7 @@ import { loginSchema } from "../utils/validation";
 
 const userService = new UserService();
 
+
 export class AuthController {
     async login(req: Request, res: Response, next: NextFunction)
     {
@@ -39,14 +40,25 @@ export class AuthController {
     async isAuth(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const token = req.headers["token"] as string;
+            const token = req.headers["authorization"] as string;
 
             if(!token)
                 throw new ApplicationError(httpErrorTypes.UNAUTHORIZED);
             
             const data = encodeToken(token);
 
+            req.body.auth = data;
+
             return next();
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getAuthInfo(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            return sendResponse(res, req.body.auth);
         } catch (error) {
             next(error);
         }

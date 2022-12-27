@@ -53,7 +53,7 @@ export class UserService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (n:Users {id: $id}) DELETE n`;
+        const query = `MATCH (n:Users {id: $id}) DETACH DELETE n`;
 
         const result = this.getRecordDataFromNeo(await session.run(query, {id}));
 

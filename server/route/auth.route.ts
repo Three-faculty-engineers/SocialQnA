@@ -5,5 +5,6 @@ const authController = new AuthController();
 const router = express.Router();
 
 router.post("/", authController.login);
+router.get("/", authController.isAuth, authController.getAuthInfo);
 
 export default router;
