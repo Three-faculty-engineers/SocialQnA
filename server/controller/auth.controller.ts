@@ -40,9 +40,9 @@ export class AuthController {
     async isAuth(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const token = req.headers["authorization"] as string;
+            const token = req.headers["authorization"] as string | undefined | null;
 
-            if(!token)
+            if(!token || token === "undefined" || token === "null")
                 throw new ApplicationError(httpErrorTypes.UNAUTHORIZED);
             
             const data = encodeToken(token);
