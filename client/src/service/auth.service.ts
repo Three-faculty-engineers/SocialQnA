@@ -7,6 +7,7 @@ const USER_BASE_URL = `${API_URL}/user`;
 
 export async function login(payload: AuthLoginDto)
 {
+
     const result = await fetchResult(`${BASE_URL}`, {
         method: "POST",
         payload
@@ -23,4 +24,19 @@ export async function register(payload: AuthRegisterDto)
     })
 
     return result;
-} 
+}
+
+export async function getAuthInfo()
+{
+    const result = await fetchResult(`${BASE_URL}`, {
+        method: "GET",
+        token: localStorage.getItem("token") as string | undefined
+    });
+
+    return result;
+}
+
+export function logOut()
+{
+    localStorage.removeItem("token");
+}
