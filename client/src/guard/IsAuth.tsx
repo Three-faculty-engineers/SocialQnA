@@ -35,11 +35,11 @@ export function IsAuth({ children }: {children: JSX.Element})
 
     // }, [auth])
 
-    const {data, error, isPending} = useAsync({ promiseFn: getAuthInfo });
+    // const {data, error, isPending} = useAsync({ promiseFn: getAuthInfo });
 
-    while(!isPending) {};
+    // while(!isPending) {};
 
-    console.log(data);
+    // console.log(data);
 
     // if(!error)
     // {
