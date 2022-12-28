@@ -9,7 +9,6 @@ import { Error404 } from './common/Error404';
 import { useEffect, useState } from 'react';
 import { getAuthInfo } from './service/auth.service';
 import { Settings } from './user/Settings';
-import { IsAuth } from './guard/IsAuth';
 
 function App() {
 
@@ -38,14 +37,15 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}></Route>
-        <Route path="/home" element={<Home />}></Route>
+        <Route path="/" element={<Home />}></Route>
         <Route path="/profile/:id" element={ <Profile />}></Route>
         <Route path="/error404" element={<Error404 />}></Route>
-        <Route path="/settings" element={<Settings />}></Route>
+        <Route path="/settings" element={<Settings auth={auth} />}></Route>
       </Routes>
     </BrowserRouter>
     </>
   );
+
 }
 
 export default App;

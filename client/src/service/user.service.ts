@@ -15,10 +15,19 @@ export async function get(id: string)
 
 export async function update(payload: UserUpdateDto)
 {
-    const result = await fetchResult(`${BASE_URL}/`, {
-        method: "POST",
+    const result = await fetchResult(`${BASE_URL}/${payload.id}`, {
+        method: "PUT",
         payload,
         token: localStorage.getItem("token") as string | undefined
+    })
+
+    return result;
+}
+
+export async function remove(id: string)
+{
+    const result = await fetchResult(`${BASE_URL}/${id}`, { 
+        method: "DELETE"
     })
 
     return result;

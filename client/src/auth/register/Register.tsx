@@ -26,7 +26,8 @@ export function Register() {
         })
 
         if(!data.success) {
-            setAlerts(data.error.issues.map((issue: { message: any; }) => issue.message));
+            const errors = data.error.issues || [{message: data.error.message}];
+            setAlerts(errors.map((issue: { message: any; }) => issue.message));
             return;
         }
     }
