@@ -6,9 +6,20 @@ import { httpErrorTypes } from "../utils/error/types.error";
 import { BaseService } from "./base.service";
 
 export class UserService extends BaseService {
+    
+    constructor()
+    {
+        super();
+    }
+
     async create(user: User)
     {
         const session = this.neo4jDriver.session();
+
+        if(await this.getFromEmail(user.email))
+        {
+            throw new ApplicationError({...httpErrorTypes.BAD_REQUEST, message: "User with that email exist in database!"});
+        }
 
         user.password = await hashValue(user.password);
 
