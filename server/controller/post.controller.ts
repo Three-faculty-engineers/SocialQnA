@@ -94,4 +94,15 @@ export class PostController {
             next(error);
         }
     }
+
+    async visitPost(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const result = await postService.incrementInSortedSet(req.params.id);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
