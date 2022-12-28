@@ -93,4 +93,15 @@ export class PostService extends BaseService {
 
         return result as Post[];
     }
+
+    async incrementInSortedSet(id: string)
+    {
+        await this.redisDriver.connect();
+
+        const result = await this.redisDriver.zIncrBy("post:visit", 1, id);
+
+        await this.redisDriver.disconnect();
+
+        return result;
+    }
 }
