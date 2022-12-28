@@ -2,6 +2,7 @@ import { Comment } from "./Comment";
 import { Community } from "./Community";
 import { IModel } from "./IModel";
 import { User } from "./User";
+import { UserLikePost } from "./UserLikePost";
 
 export interface Post extends IModel
 {
@@ -10,7 +11,7 @@ export interface Post extends IModel
     timeStamp: Date;
     author: User;
     community: Community;
-    userLikes?: User[];
+    userLikes?: UserLikePost[];
     userDislikes?: User[];  
     comments?: Comment[];
 }

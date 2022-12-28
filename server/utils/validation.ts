@@ -89,3 +89,16 @@ export const communityUpdateScheme = z.object({
     title: z.string().optional(),
     description: z.string().optional()
 })
+
+export const commentCreateSchema = z.object({
+    text: z.string({
+        required_error: "Text is required!"
+    }),
+    userID: z.string({
+        required_error: "User ID is required!"
+    }),
+    postID: z.string({
+        required_error: "Post ID is required!"
+    })
+    
+})
