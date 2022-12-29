@@ -57,7 +57,7 @@ export const updateUserSchema = z.object({
     }).min(3, {
         message: "Username must be greater then 3 characters"
     }).optional(),
-})
+}).strict();
 
 export const postCreateSchema = z.object({
     userID: z.string({
@@ -74,7 +74,7 @@ export const postCreateSchema = z.object({
 export const postUpdateSchema = z.object({
     title: z.string().optional(),
     text: z.string().optional()
-})
+}).strict();
 
 export const communityCreateScheme = z.object({
     title: z.string({
@@ -88,4 +88,4 @@ export const communityCreateScheme = z.object({
 export const communityUpdateScheme = z.object({
     title: z.string().optional(),
     description: z.string().optional()
-})
+}).strict();

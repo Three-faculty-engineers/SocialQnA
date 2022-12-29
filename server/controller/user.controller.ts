@@ -2,12 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { UserFollowCommunityDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
 import { User } from "../model/User";
 import { UserService } from "../service/user.service";
-import { compareValues } from "../utils/crypt";
 import ApplicationError from "../utils/error/application.error";
 import { httpErrorTypes } from "../utils/error/types.error";
-import { signToken } from "../utils/jwt";
 import { sendResponse } from "../utils/response";
-import { loginSchema, registerSchema, updateUserSchema } from "../utils/validation";
+import { registerSchema, updateUserSchema } from "../utils/validation";
 
 const userService = new UserService();
 
@@ -46,11 +44,11 @@ export class UserController {
     {
         try {
             const user = req.body as User;
-
-            user.id = req.params.id;
-
+            
             await updateUserSchema.parseAsync(user);
 
+            user.id = req.params.id;
+            
             const result = await userService.update(user);
 
             return sendResponse(res, result);

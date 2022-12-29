@@ -10,8 +10,8 @@ export class PostService extends BaseService {
         const session = this.neo4jDriver.session();
 
         const query = `MATCH 
-            (n: Users {id: $userID}) 
-            (c: Communities)
+            (n: Users {id: $userID}), 
+            (c: Communities {id: $communityID})
         CREATE (n) -[r: posted]-> 
         (p: Posts {id:randomUUID(), title: $title, text: $text, timeStamp: dateTime()}) 
         <-[h: has_post]- (c)
@@ -57,6 +57,7 @@ export class PostService extends BaseService {
         const session = this.neo4jDriver.session();
 
         const query = `MATCH (n: Posts {id: $id})
+        CREATE (n) - [eh:edit_history {editedAt: dateTime(), value: n.text}] -> (n) 
         SET ${Object.getOwnPropertyNames(post).map(prop => `n.${prop} = $${prop}`)}
         RETURN n
         `
