@@ -6,12 +6,14 @@ import userRoute from "./user.route";
 import postRoute from "./post.route";
 import authRoute from "./auth.route";
 import communityRoute from "./community.route"
+import commentRoute from "./comment.route";
 
 export default function (app: Express) { 
     app.use("/user", userRoute);
     app.use("/post", postRoute);
     app.use("/auth", authRoute);
     app.use("/community", communityRoute);
+    app.use("/comment", commentRoute);
     
     app.use((req, res, next) => {
         next(new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND));
