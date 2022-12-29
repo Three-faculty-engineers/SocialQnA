@@ -9,6 +9,7 @@ import { Error404 } from './common/Error404';
 import { useEffect, useState } from 'react';
 import { getAuthInfo } from './service/auth.service';
 import { Settings } from './user/Settings';
+import { ShowPost } from './post/ShowPost';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/register" element={<Register/>}></Route>
         <Route path="/" element={<Home />}></Route>
         <Route path="/profile/:id" element={ <Profile />}></Route>
+        <Route path="/post/:id" element={ <ShowPost />}></Route>
         <Route path="/error404" element={<Error404 />}></Route>
         <Route path="/settings" element={<Settings auth={auth} />}></Route>
       </Routes>
