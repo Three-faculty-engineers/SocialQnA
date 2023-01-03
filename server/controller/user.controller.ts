@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UserFollowCommunityDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
+import { UserFollowCommunityDto, UserFollowUserDto, UserLikeCommentDto, UserLikePostDto } from "../dto/user.dto";
 import { User } from "../model/User";
 import { UserService } from "../service/user.service";
 import ApplicationError from "../utils/error/application.error";
@@ -144,4 +144,17 @@ export class UserController {
             next(error);
         }
     }
+
+    async followUser(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const payload = req.body as UserFollowUserDto;
+
+            const result = await userService.followUser(payload);
+
+            return sendResponse(res, result[0]);
+        } catch (error) {
+            next(error);
+        }
+    } 
 }

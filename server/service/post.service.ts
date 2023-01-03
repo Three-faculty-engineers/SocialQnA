@@ -105,4 +105,37 @@ export class PostService extends BaseService {
 
         return result;
     }
+
+    async getEditHistory(id: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `MATCH (p: Posts {id: $id}) -[r:edit_history]-> (p: Posts {id: $id}) RETURN r`;
+
+        const result = this.getRecordDataFromNeo(await session.run(query, {id}));
+
+        session.close();
+
+        return result;
+    }
+
+    async getByFollowingUsers(id: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH (u: Users {id: $id}) 
+        -[:follows]-> (uf: Users) 
+        -[:posted]-> (p: Posts)
+        <-[r:likes*0..1]- (ul: Users)
+        RETURN p, count(r) as likeObj`;
+
+        const resultObj = await session.run(query, {id});
+        let result = this.getRecordDataFromNeo(resultObj);
+        result[0].like = resultObj.records[0]["_fields"][1];
+
+        session.close();
+
+        return result;
+    }
 }

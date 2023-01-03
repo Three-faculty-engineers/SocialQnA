@@ -33,6 +33,8 @@ export class PostController {
 
             await postCreateSchema.parseAsync(post);
 
+            if(req.body.auth) post.userID = req.body.auth.id;
+
             const payload = await postService.create(post);
 
             return sendResponse(res, payload);
@@ -99,6 +101,28 @@ export class PostController {
     {
         try {
             const result = await postService.incrementInSortedSet(req.params.id);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getEditHistory(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const result = await postService.getEditHistory(req.params.id);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getByFollowingUsers(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const result = await postService.getByFollowingUsers(req.params.id);
 
             return sendResponse(res, result);
         } catch (error) {
