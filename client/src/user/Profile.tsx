@@ -33,7 +33,6 @@ export function Profile() {
     async function getPosts()
     {
         const data = await getByUserID(id!);
-        console.log(data);
         if(!data.success)
         {
             return;

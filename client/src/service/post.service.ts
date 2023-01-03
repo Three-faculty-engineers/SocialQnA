@@ -1,4 +1,5 @@
 import { API_URL } from "../config";
+import { PostDto } from "../post/post.dto";
 import { fetchResult } from "../utils/fetch.helper";
 
 const BASE_URL = `${API_URL}/post`;
@@ -7,6 +8,17 @@ export async function getByUserID(id: string)
 {
     const result = await fetchResult(`${BASE_URL}/user/${id}`, {
         method: "GET"
+    })
+
+    return result;
+}
+
+export async function create(post: PostDto)
+{
+    const result = await fetchResult(`${BASE_URL}/`, {
+        method: "POST",
+        payload: post,
+        token: localStorage.getItem("token")!
     })
 
     return result;
@@ -32,6 +44,26 @@ export async function remove(id: string)
 {
     const result = await fetchResult(`${BASE_URL}/${id}`, {
         method: "DELETE"
+    });
+
+    return result;
+}
+
+export async function update(post: PostDto)
+{
+    const {id, timeStamp, ...data} = post;
+    const result = await fetchResult(`${BASE_URL}/${id}`, {
+        method: "PUT",
+        payload: data
+    });
+
+    return result;
+}
+
+export async function getEditHistory(id: string)
+{
+    const result = await fetchResult(`${BASE_URL}/edit-history/${id}`, {
+        method: "GET"
     });
 
     return result;
