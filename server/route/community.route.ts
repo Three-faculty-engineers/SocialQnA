@@ -5,6 +5,8 @@ const router = express.Router();
 
 const communityController = new CommunityController();
 
+router.get("/getAll", communityController.getAll);
+
 router.get("/:id", communityController.get);
 
 router.get("/getAllUsers/:id", communityController.getAllUsers)

@@ -31,12 +31,36 @@ export class CommunityService extends BaseService
 
         return result;
     }
+    async getByTitle(title: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `MATCH (n:Communities) WHERE n.title = $title RETURN n`;
+
+        const result = this.getRecordDataFromNeo(await session.run(query, {title}));
+        
+        session.close();
+
+        return result;
+    }
+    async getAll()
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `MATCH (n:Communities) RETURN n`;
+
+        const result = this.getRecordDataFromNeo(await session.run(query));
+                
+        session.close();
+        
+        return result as Community[];
+    }
 
     async delete(id: string)
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (n:Communities) WHERE n.id = $id delete n`;
+        const query = `MATCH (n:Communities) WHERE n.id = $id DETACH DELETE n`;
 
         const result = this.getRecordDataFromNeo(await session.run(query, {id}));
 

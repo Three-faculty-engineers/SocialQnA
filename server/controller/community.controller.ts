@@ -39,6 +39,20 @@ export class CommunityController
         }
     }
 
+    async getAll(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+
+            const payload = await communityService.getAll();
+
+            if(!payload.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, payload);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async update(req: Request, res: Response, next: NextFunction)
     {
         try {
