@@ -9,7 +9,7 @@ export class Neo4jDB {
 
     constructor(private readonly url: string, private readonly username: string, private readonly password: string) 
     {
-        this.driver = driver(this.url, auth.basic(this.username, this.password));
+        this.driver = driver(this.url, auth.basic(this.username, this.password), { disableLosslessIntegers: true });
     }
 
     async testConnection()
