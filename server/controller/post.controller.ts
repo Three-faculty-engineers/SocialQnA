@@ -31,9 +31,9 @@ export class PostController {
         try {
             const post = req.body as CreatePostDto;
 
-            await postCreateSchema.parseAsync(post);
-
             if(req.body.auth) post.userID = req.body.auth.id;
+
+            await postCreateSchema.parseAsync(post);
 
             const payload = await postService.create(post);
 
