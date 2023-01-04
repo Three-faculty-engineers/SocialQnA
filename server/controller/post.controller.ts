@@ -18,9 +18,9 @@ export class PostController {
 
             const result = await postService.get(id);
 
-            if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }

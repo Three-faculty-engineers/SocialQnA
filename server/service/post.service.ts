@@ -30,9 +30,14 @@ export class PostService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (n: Posts) WHERE n.id = $id RETURN n`
+        const query = `
+        MATCH (n: Posts {id: $id}) <-[:posted]- (u: Users)
+        OPTIONAL MATCH (n: Posts {id: $id}) <-[l:likes]- (ul:Users)
+        OPTIONAL MATCH (n: Posts {id: $id}) <-[d:dislikes]- (ud:Users) 
+        WITH n, count(d) as dislikeCount, count(l) as likeCount, u
+        RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
 
-        const result = this.getRecordDataFromNeo(await session.run(query, {id}))
+        const result = (await session.run(query, {id})).records[0]["_fields"][0];
 
         session.close();
 
@@ -57,7 +62,7 @@ export class PostService extends BaseService {
         const session = this.neo4jDriver.session();
 
         const query = `MATCH (n: Posts {id: $id})
-        CREATE (n) - [eh:edit_history {editedAt: dateTime(), value: n.text}] -> (n) 
+        CREATE (n) - [eh:edit_history {editedAt: dateTime(), title: n.title, text: n.text}] -> (n) 
         SET ${Object.getOwnPropertyNames(post).map(prop => `n.${prop} = $${prop}`)}
         RETURN n
         `
@@ -73,13 +78,18 @@ export class PostService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts) RETURN p`
+        const query = `
+        MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts)
+        OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
+        OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, u
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
 
-        const result = this.getRecordDataFromNeo(await session.run(query, {userID}));
+        const result = (await session.run(query, {userID})).records.map(record => record["_fields"][0]);
 
         session.close();
 
-        return result as Post[];
+        return result;
     }
 
     async getByCommunityID(communityID: string)
@@ -127,12 +137,12 @@ export class PostService extends BaseService {
         MATCH (u: Users {id: $id}) 
         -[:follows]-> (uf: Users) 
         -[:posted]-> (p: Posts)
-        <-[r:likes*0..1]- (ul: Users)
-        RETURN p, count(r) as likeObj`;
+        OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
+        OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, uf
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: uf{.username, .id}}`;
 
-        const resultObj = await session.run(query, {id});
-        let result = this.getRecordDataFromNeo(resultObj);
-        result[0].like = resultObj.records[0]["_fields"][1];
+        const result = (await session.run(query, {id})).records.map(record => record["_fields"][0]);
 
         session.close();
 
