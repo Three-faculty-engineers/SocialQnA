@@ -31,7 +31,7 @@ export function PostEditHistory(props: Props)
             return;
         }
 
-        setHistory(result.data.map((el: { value: string }, index: number) => <p key={index}>{el.value}</p>));
+        setHistory(result.data.map((el: { text: string, title: string }, index: number) => <div key={index}><h3>{el.title}</h3><p>{el.text}</p></div>));
     }
 
     useEffect(() => {

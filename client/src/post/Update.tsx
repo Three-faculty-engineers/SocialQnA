@@ -13,7 +13,7 @@ interface Props {
 export function UpdatePost(props: Props)
 {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [post, setPost] = useState({id: "", text: ""});
+    const [post, setPost] = useState({id: "", text: "", title: ""});
 
     async function handleOnSubmit()
     {
@@ -70,6 +70,18 @@ export function UpdatePost(props: Props)
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3" controlId="formTitle">
+                <Form.Label className="text-center">
+                    Text
+                </Form.Label>
+                <Form.Control
+                type="title"
+                placeholder="Unesite naslov"
+                value={post.title}
+                name="title"
+                onChange={handleOnChange}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formText">
                 <Form.Label className="text-center">
                     Text
                 </Form.Label>

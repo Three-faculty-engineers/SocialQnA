@@ -9,7 +9,11 @@ import { getByUserID } from "../service/post.service";
 import { get } from "../service/user.service";
 import { UserDto } from "./user.dto";
 
-export function Profile() {
+interface Props {
+    auth: any;
+}
+
+export function Profile(props: Props) {
     const navigate = useNavigate();
     const [user, setUser] = useState({} as UserDto);
     const [posts, setPosts] = useState([] as PostDto[]);
@@ -47,7 +51,7 @@ export function Profile() {
     }, []);
 
     const postsElements: JSX.Element[] = [];
-    posts.forEach((post, index) => postsElements.push(<Post post={post} key={index}></Post>));
+    posts.forEach((post, index) => postsElements.push(<Post post={post} key={index} userID={props.auth.id}></Post>));
 
     return (
         <Container>
