@@ -34,8 +34,8 @@ export class PostService extends BaseService {
         MATCH (n: Posts {id: $id}) <-[:posted]- (u: Users)
         OPTIONAL MATCH (n: Posts {id: $id}) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (n: Posts {id: $id}) <-[d:dislikes]- (ud:Users) 
-        WITH n, count(d) as dislikeCount, count(l) as likeCount, u
-        RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
+        WITH n, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes
+        RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes}`
 
         let result = (await session.run(query, {id})).records;
 
@@ -86,8 +86,8 @@ export class PostService extends BaseService {
         MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, u
-        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes}`
 
         const result = (await session.run(query, {userID})).records.map(record => record["_fields"][0]);
 
@@ -143,8 +143,8 @@ export class PostService extends BaseService {
         -[:posted]-> (p: Posts)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, uf
-        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: uf{.username, .id}}`;
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, uf, collect(ul.id) as userLikes, collect(ud.id) as userDislikes
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: uf{.username, .id}, userLikes: userLikes, userDislikes: userDislikes}`;
 
         const result = (await session.run(query, {id})).records.map(record => record["_fields"][0]);
 
