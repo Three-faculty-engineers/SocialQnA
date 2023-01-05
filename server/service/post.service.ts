@@ -37,7 +37,11 @@ export class PostService extends BaseService {
         WITH n, count(d) as dislikeCount, count(l) as likeCount, u
         RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
 
-        const result = (await session.run(query, {id})).records[0]["_fields"][0];
+        let result = (await session.run(query, {id})).records;
+
+        if(result.length !== 1) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+        
+        result = result[0]["_fields"][0];
 
         session.close();
 
