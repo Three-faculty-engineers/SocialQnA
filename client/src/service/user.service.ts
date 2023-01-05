@@ -52,3 +52,53 @@ export async function getFollowUserInfo({userFollowID, userFollowingID}: {userFo
 
     return result;
 }
+
+export async function likePost(payload: {userID: string, postID: string})
+{
+    const result = await fetchResult(`${BASE_URL}/like/post`, {
+        method: "POST",
+        payload
+    })
+
+    return result;
+}
+
+export async function dislikePost(payload: {userID: string, postID: string})
+{
+    const result = await fetchResult(`${BASE_URL}/dislike/post`, {
+        method: "POST",
+        payload
+    })
+
+    return result;
+}
+
+export async function followCommunity(payload: {userID: string, communityID: string})
+{
+    const result = await fetchResult(`${BASE_URL}/follow/community`, {
+        method: "POST",
+        payload
+    });
+
+    return result;
+}
+
+export async function likeComment(payload: {userID: string, commentID: string})
+{
+    const result = await fetchResult(`${BASE_URL}/like/comment`, {
+        method: "POST",
+        payload
+    })
+
+    return result;
+}
+
+export async function dislikeComment(payload: {userID: string, commentID: string})
+{
+    const result = await fetchResult(`${BASE_URL}/dislike/comment`, {
+        method: "POST",
+        payload
+    })
+
+    return result;
+}
