@@ -7,10 +7,14 @@ import { get, visitPost } from "../service/post.service";
 import { Post } from "./Post";
 import { PostDto } from "./post.dto";
 
-export function ShowPost()
+interface Props {
+  auth: any;
+}
+
+export function ShowPost(props: Props)
 {
     const navigate = useNavigate();
-    const [post, setPost] = useState({title: "", text: ""} as PostDto);
+    const [post, setPost] = useState({title: "", text: "", id: "", likes: 0, dislikes: 0, user: {}} as PostDto);
     const { id } = useParams();
 
     async function getPost()
@@ -43,7 +47,7 @@ export function ShowPost()
           <Col md={3} lg={3} xs={12}>
           </Col>
           <Col md={6} lg={6} xs={12}>
-            <Post post={post} OnRemove={handleOnRemove}></Post>
+            <Post post={post} OnRemove={handleOnRemove} userID={props.auth.id}></Post>
           </Col>
           <Col md={3} lg={3} xs={12}>
           </Col>

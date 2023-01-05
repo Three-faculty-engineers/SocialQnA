@@ -18,9 +18,9 @@ export class PostController {
 
             const result = await postService.get(id);
 
-            if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }
@@ -31,9 +31,9 @@ export class PostController {
         try {
             const post = req.body as CreatePostDto;
 
-            await postCreateSchema.parseAsync(post);
-
             if(req.body.auth) post.userID = req.body.auth.id;
+
+            await postCreateSchema.parseAsync(post);
 
             const payload = await postService.create(post);
 

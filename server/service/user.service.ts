@@ -219,10 +219,29 @@ export class UserService extends BaseService {
         MERGE (u)-[r:follows]->(uf)
         ON MATCH SET r.toDelete = true
         ON CREATE SET r.createdAt = datetime()
-        WITH r
+        WITH r, r.createdAt as createdAt
         WHERE r.toDelete
         DELETE r
         `
+        await session.run(query, payload);
+
+        const result = (await this.getFollowUserInfo(payload))[0];
+
+        session.close();
+
+        return result;
+    }
+
+    async getFollowUserInfo(payload: {userFollowID: string, userFollowingID: string})
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users {id: $userFollowID}) -[f:follows]-> (uf: Users {id: $userFollowingID})
+        RETURN f
+        `;
+
         const result = this.getRecordDataFromNeo(await session.run(query, payload));
 
         session.close();

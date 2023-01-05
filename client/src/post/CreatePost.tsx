@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
+import { getAll } from "../service/community.service";
 import { create } from "../service/post.service";
 import { PostDto } from "./post.dto";
 
@@ -11,12 +12,17 @@ interface Props {
 
 export function CreatePost(props: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [post, setPost] = useState({title: "", text: ""});
+    const [post, setPost] = useState({title: "", text: "", communityID: ""});
     const [communities, setCommunities] = useState([]);
 
     async function handleOnSubmit()
     {
-        
+      if(!post.communityID)
+      {
+        alert("Izaberite zajednicu!");
+        return;
+      }
+
       const result = await create(post as PostDto);
 
       if(!result.success)
@@ -24,6 +30,8 @@ export function CreatePost(props: Props) {
         alert("Something goes wrong. Please try again");
         return;
       }
+
+      alert("Successfully added post");
 
       if(props.OnCreate)
       {
@@ -50,6 +58,22 @@ export function CreatePost(props: Props) {
             [name]: value
         })
     }
+
+    async function getCommunities()
+    {
+      const result = await getAll();
+
+      if(!result.success)
+      {
+        return;
+      }
+
+      setCommunities(result.data.map((el: {id: string, title: string}, index: number) => <option value={el.id} key={index}>{el.title}</option>));
+    }
+
+    useEffect(() => {
+      getCommunities();
+    }, [])
     
     return(
         <Form onSubmit={handleOnSubmit} className="d-flex">
@@ -64,11 +88,9 @@ export function CreatePost(props: Props) {
           </Modal.Header>
           <Modal.Body>
           <Form.Group className="mb-3" controlId="formTitle">
-                <Form.Select>
-                    <option>Community</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <Form.Select name="communityID" onChange={handleOnChange}>
+                    <option value={0}>Community</option>
+                    {communities}
                 </Form.Select>
                 <Form.Label className="text-center">
                     Title

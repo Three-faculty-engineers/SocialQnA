@@ -39,8 +39,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}></Route>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/profile/:id" element={ <Profile />}></Route>
-        <Route path="/post/:id" element={ <ShowPost />}></Route>
+        <Route path="/profile/:id" element={ <Profile auth={auth}/>}></Route>
+        <Route path="/post/:id" element={ <ShowPost auth={auth}/>}></Route>
         <Route path="/error404" element={<Error404 />}></Route>
         <Route path="/settings" element={<Settings auth={auth} />}></Route>
       </Routes>

@@ -148,13 +148,28 @@ export class UserController {
     async followUser(req: Request, res: Response, next: NextFunction)
     {
         try {
-            const payload = req.body as UserFollowUserDto;
+            let payload = req.body as UserFollowUserDto;
+
+            payload.userFollowID = req.body.auth.id;
 
             const result = await userService.followUser(payload);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }
-    } 
+    }
+
+    async getFollowUserInfo(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            let payload = req.params as {userFollowID: string, userFollowingID: string};
+
+            const result = await userService.getFollowUserInfo(payload);
+
+            return sendResponse(res, result[0] || {createdAt: {day: ""}});
+        } catch (error) {
+            next(error);
+        }
+    }
 }
