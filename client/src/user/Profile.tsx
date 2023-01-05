@@ -7,6 +7,7 @@ import { Post } from "../post/Post";
 import { PostDto } from "../post/post.dto";
 import { getByUserID } from "../service/post.service";
 import { get } from "../service/user.service";
+import { FollowUser } from "./FollowUser";
 import { UserDto } from "./user.dto";
 
 interface Props {
@@ -58,6 +59,7 @@ export function Profile(props: Props) {
         <Row className="vh-100 mt-5">
           <Col md={3} lg={3} xs={12}>
             <h3>{user.username}</h3>
+            <FollowUser auth={props.auth} userID={user.id}></FollowUser>
           </Col>
           <Col md={6} lg={6} xs={12}>
             {posts.length ? postsElements : (

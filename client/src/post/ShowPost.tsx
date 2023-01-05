@@ -14,7 +14,7 @@ interface Props {
 export function ShowPost(props: Props)
 {
     const navigate = useNavigate();
-    const [post, setPost] = useState({title: "", text: ""} as PostDto);
+    const [post, setPost] = useState({title: "", text: "", id: "", likes: 0, dislikes: 0, user: {}} as PostDto);
     const { id } = useParams();
 
     async function getPost()
