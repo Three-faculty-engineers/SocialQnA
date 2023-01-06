@@ -11,4 +11,5 @@ export interface PostDto {
     user?: UserDto;
     userLikes: string[];
     userDislikes: string[];
+    community: any;
 }
