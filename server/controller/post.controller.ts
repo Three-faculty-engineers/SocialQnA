@@ -16,9 +16,16 @@ export class PostController {
         try {
             const id = req.params.id;
 
-            const result = await postService.get(id);
+            let result = await postService.getFromRedis(id);
 
-            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+            if(result)
+            {
+                return sendResponse(res, result);
+            }
+
+            result = await postService.get(id);
+
+            await postService.setInRedis(result);
 
             return sendResponse(res, result);
         } catch (error) {
@@ -125,6 +132,17 @@ export class PostController {
             const result = await postService.getByFollowingUsers(req.params.id);
 
             return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getTop10(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            const result = await postService.getTop10();
+
+            sendResponse(res, result);
         } catch (error) {
             next(error);
         }
