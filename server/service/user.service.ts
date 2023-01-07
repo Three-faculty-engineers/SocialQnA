@@ -16,7 +16,7 @@ export class UserService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        if(await this.getFromEmail(user.email))
+        if(((await this.getFromEmail(user.email)).length))
         {
             throw new ApplicationError({...httpErrorTypes.BAD_REQUEST, message: "User with that email exist in database!"});
         }
