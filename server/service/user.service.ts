@@ -108,11 +108,11 @@ export class UserService extends BaseService {
         WHERE r.toDelete
         DELETE r
         `
-        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+        const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
         session.close();
 
-        return result;
+        return result.relationshipsCreated ? { created: true } : {created: false}; 
     }
 
     async dislikePost(payload: UserLikePostDto)
@@ -131,11 +131,11 @@ export class UserService extends BaseService {
         WHERE r.toDelete
         DELETE r
         `
-        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+        const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
         session.close();
 
-        return result;
+        return result.relationshipsCreated ? { created: true } : {created: false};
     }
 
     async likeComment(payload: UserLikeCommentDto)
@@ -154,11 +154,11 @@ export class UserService extends BaseService {
         WHERE r.toDelete
         DELETE r
         `
-        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+        const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
         session.close();
 
-        return result;
+        return result.relationshipsCreated ? { created: true } : {created: false};
     }
 
     async dislikeComment(payload: UserLikeCommentDto)
@@ -177,11 +177,11 @@ export class UserService extends BaseService {
         WHERE r.toDelete
         DELETE r
         `
-        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+        const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
         session.close();
 
-        return result;
+        return result.relationshipsCreated ? { created: true } : {created: false};
     }
 
     async followCommunity(payload: UserFollowCommunityDto)
@@ -200,11 +200,11 @@ export class UserService extends BaseService {
         WHERE r.toDelete
         DELETE r
         `
-        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+        const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
         session.close();
 
-        return result;
+        return result.relationshipsCreated ? { created: true } : {created: false};
     }
 
     async followUser(payload: UserFollowUserDto)

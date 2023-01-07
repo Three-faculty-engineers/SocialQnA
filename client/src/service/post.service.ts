@@ -68,3 +68,21 @@ export async function getEditHistory(id: string)
 
     return result;
 }
+
+export async function getByFollowers(id: string)
+{
+    const result = await fetchResult(`${BASE_URL}/following-users/${id}`, {
+        method: "GET"
+    });
+
+    return result;
+}
+
+export async function getTop10()
+{
+    const result = await fetchResult(`${BASE_URL}/top10`, {
+        method: "GET"
+    });
+
+    return result;
+} 

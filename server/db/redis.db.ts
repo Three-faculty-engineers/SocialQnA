@@ -16,13 +16,10 @@ export class RedisDB {
         try {
             await this.client.connect();
             console.log('\x1b[32m%s\x1b[0m',`Redis connected...`);
+            await this.client.disconnect();
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', "Redis is not connected...");
             console.log('\x1b[31m%s\x1b[0m', "ERROR:", (error as Error).message);
-        }
-        finally
-        {
-            await this.client.disconnect();
         }
     }
 }

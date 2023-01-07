@@ -78,10 +78,8 @@ export class UserController {
             const payload = req.body as UserLikePostDto;
 
             const result = await userService.likePost(payload);
-            
-            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }
@@ -93,10 +91,8 @@ export class UserController {
             const payload = req.body as UserLikePostDto;
 
             const result = await userService.dislikePost(payload);
-            
-            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }
@@ -108,10 +104,8 @@ export class UserController {
             const payload = req.body as UserLikeCommentDto;
 
             const result = await userService.likeComment(payload);
-            
-            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }
@@ -123,10 +117,8 @@ export class UserController {
             const payload = req.body as UserLikeCommentDto;
 
             const result = await userService.dislikeComment(payload);
-            
-            // if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }
@@ -139,7 +131,7 @@ export class UserController {
 
             const result  = await userService.followCommunity(payload);
 
-            return sendResponse(res, result[0]);
+            return sendResponse(res, result);
         } catch (error) {
             next(error);
         }

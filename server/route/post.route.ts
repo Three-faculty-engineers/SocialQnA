@@ -7,6 +7,7 @@ const authController = new AuthController();
 
 const router = express.Router();
 
+router.get("/top10/", postController.getTop10);
 router.get("/:id", postController.get);
 router.get("/user/:userID", postController.getByUserID);
 router.get("/community/:communityID", postController.getByCommunityID);

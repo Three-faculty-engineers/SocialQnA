@@ -24,6 +24,8 @@ export function PostEditHistory(props: Props)
 
     async function editHistory()
     {
+        if(!props.id) return;
+        
         const result = await getEditHistory(props.id);
         
         if(!result.success)
@@ -36,7 +38,7 @@ export function PostEditHistory(props: Props)
 
     useEffect(() => {
         editHistory();
-    }, []);
+    }, [props.id]);
 
     return (
       <>

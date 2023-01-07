@@ -31,11 +31,11 @@ export class PostService extends BaseService {
         const session = this.neo4jDriver.session();
 
         const query = `
-        MATCH (n: Posts {id: $id}) <-[:posted]- (u: Users)
+        MATCH (c: Communities) -[:has_post]-> (n: Posts {id: $id}) <-[:posted]- (u: Users)
         OPTIONAL MATCH (n: Posts {id: $id}) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (n: Posts {id: $id}) <-[d:dislikes]- (ud:Users) 
-        WITH n, count(d) as dislikeCount, count(l) as likeCount, u
-        RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
+        WITH n, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`
 
         let result = (await session.run(query, {id})).records;
 
@@ -83,11 +83,11 @@ export class PostService extends BaseService {
         const session = this.neo4jDriver.session();
 
         const query = `
-        MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts)
+        MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts) <-[:has_post]- (c: Communities)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, u
-        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}}`
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`
 
         const result = (await session.run(query, {userID})).records.map(record => record["_fields"][0]);
 
@@ -111,11 +111,17 @@ export class PostService extends BaseService {
 
     async incrementInSortedSet(id: string)
     {
-        await this.redisDriver.connect();
+        if(!this.redisDriver.isOpen)
+        {
+            await this.redisDriver.connect();
+        }
 
         const result = await this.redisDriver.zIncrBy("post:visit", 1, id);
 
-        await this.redisDriver.disconnect();
+        if(this.redisDriver.isOpen)
+        {
+            await this.redisDriver.disconnect();
+        }
 
         return result;
     }
@@ -140,16 +146,68 @@ export class PostService extends BaseService {
         const query = `
         MATCH (u: Users {id: $id}) 
         -[:follows]-> (uf: Users) 
-        -[:posted]-> (p: Posts)
+        -[:posted]-> (p: Posts) <-[:has_post]- (c: Communities)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, uf
-        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: uf{.username, .id}}`;
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, uf, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: uf{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`;
 
         const result = (await session.run(query, {id})).records.map(record => record["_fields"][0]);
 
         session.close();
 
         return result;
+    }
+
+    async getTop10()
+    {
+        if(!this.redisDriver.isOpen)
+        {
+            await this.redisDriver.connect();
+        }
+
+        const top10IDs = await this.redisDriver.zRange("post:visit", 0 , 9, {REV: true});
+
+        const top10 = await this.redisDriver.hmGet("posts", top10IDs);
+        
+        if(this.redisDriver.isOpen)
+        {
+            await this.redisDriver.disconnect();
+        }
+
+
+        return top10.filter(post => !!post).map(post => JSON.parse(post)).map(post => ({id: post.id, title: post.title}));
+    }
+
+    async setInRedis(post: any)
+    {
+        if(!this.redisDriver.isOpen)
+        {
+            await this.redisDriver.connect();
+        }
+
+        await this.redisDriver.hSet("posts", post.id, JSON.stringify(post));
+
+        if(this.redisDriver.isOpen)
+        {
+            await this.redisDriver.disconnect();
+        }
+    }
+
+    async getFromRedis(id: string)
+    {
+        if(!this.redisDriver.isOpen)
+        {
+            await this.redisDriver.connect();
+        }
+
+        const result = await this.redisDriver.hGet("posts", id);
+
+        if(this.redisDriver.isOpen)
+        {
+            await this.redisDriver.disconnect();
+        }
+
+        return result ? JSON.parse(result) : null;
     }
 }
