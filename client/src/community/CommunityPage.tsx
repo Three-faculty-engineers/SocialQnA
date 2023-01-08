@@ -6,7 +6,7 @@ import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { CommunityDto } from './community.dto';
 import Community from './Community';
-
+import { CreatePost } from '../post/CreatePost';
 interface Props {
     auth: any;
 }
@@ -38,6 +38,7 @@ function CommunityPage(props: Props) {
 
     return (
         <Container>
+
         <Row className="vh-100 mt-5">
           <Col md={3} lg={3} xs={12}>
           </Col>
@@ -46,6 +47,11 @@ function CommunityPage(props: Props) {
           </Col>
           <Col md={3} lg={3} xs={12}>
           </Col>
+        </Row>
+        <Row>
+        <div className="d-flex justify-content-center">
+            <CreatePost></CreatePost>
+          </div>
         </Row>
       </Container>
     )

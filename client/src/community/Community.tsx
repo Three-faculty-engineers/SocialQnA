@@ -39,6 +39,10 @@ function Community(props: Props) {
 
     return (
         <Container>
+        <Row>        
+            <h1>{props.community.title}</h1>
+            <h2>{props.community.description}</h2>
+        </Row>
         <Row className="vh-100 mt-5">
         <Col md={1} lg={1} xs={12}>
         </Col>
