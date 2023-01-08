@@ -78,6 +78,16 @@ export async function getByFollowers(id: string)
     return result;
 }
 
+export async function getByCommunityID(communityID: string)
+{
+    const result = await fetchResult(`${BASE_URL}/community/${communityID}`, {
+        method: "GET"
+    });
+    
+    return result; 
+}
+
+
 export async function getTop10()
 {
     const result = await fetchResult(`${BASE_URL}/top10`, {

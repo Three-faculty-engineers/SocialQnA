@@ -16,6 +16,9 @@ export class CommunityController
 
             await communityCreateScheme.parseAsync(community);
 
+            if(!community.image_url)
+                community.image_url = "default_img.png"
+
             const payload = await communityService.create(community);
 
             return sendResponse(res, payload);
@@ -60,9 +63,9 @@ export class CommunityController
             
             const id = req.params.id;
 
-            community.id = id;
-
             await communityUpdateScheme.parseAsync(community);
+
+            community.id = id;
 
             const payload = await communityService.update(community);
             
@@ -94,7 +97,7 @@ export class CommunityController
     {
         try {
             const id = req.params.id;
-           
+
             if(!id) throw new ApplicationError({...httpErrorTypes.BAD_REQUEST, message: "ID is required"});
 
             const payload = await communityService.getAllUsers(id);

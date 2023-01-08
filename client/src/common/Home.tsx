@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
+import CreateCommunity from "../community/CreateCommunity";
 import { CreatePost } from "../post/CreatePost";
 import { Post } from "../post/Post";
 import { PostDto } from "../post/post.dto";
@@ -86,6 +87,9 @@ export default function Home(props: Props)
         <Col md={6} lg={6} xs={12}>
           <div className="d-flex justify-content-center">
             <CreatePost></CreatePost>
+          </div>
+          <div className="d-flex justify-content-center">
+            <CreateCommunity/>
           </div>
           {!posts.length && (
             <h3 className="text-center">Trenutno nema nijedan post</h3>

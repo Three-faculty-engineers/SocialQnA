@@ -9,7 +9,7 @@ router.get("/getAll", communityController.getAll);
 
 router.get("/:id", communityController.get);
 
-router.get("/getAllUsers/:id", communityController.getAllUsers)
+router.get("/:id/allUsers", communityController.getAllUsers)
 
 router.post("/", communityController.create);
 

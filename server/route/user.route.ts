@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get("/:id", userController.get);
 router.get("/:userFollowID/follow/user/:userFollowingID", userController.getFollowUserInfo);
+router.get("/:id/followedCommunities", userController.getFollowedCommunities)
 
 router.post("/", userController.create);
 router.post("/like/post", userController.likePost);

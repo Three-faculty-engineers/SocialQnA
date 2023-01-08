@@ -100,9 +100,13 @@ export class PostService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        const query = `MATCH (c: Communities {id: $communityID}) -[:has]-> (p: Posts) RETURN p`
-
-        const result = this.getRecordDataFromNeo(await session.run(query, {communityID}));
+        const query = `
+        MATCH (c: Communities {id: $communityID}) -[:has_post]-> (p: Posts) <-[:posted]- (u: Users)
+        OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
+        OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
+        WITH p, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`
+        const result = (await session.run(query, {communityID})).records.map(record => record["_fields"][0]);
 
         session.close();
 

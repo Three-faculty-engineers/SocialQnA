@@ -6,7 +6,7 @@ export interface Community extends IModel
 {
     title: string;
     description: string;
-    image_url: string;
+    image_url?: string;
     posts?: Post[];
     followingUsers?: User[];
 }

@@ -164,4 +164,19 @@ export class UserController {
             next(error);
         }
     }
+
+    async getFollowedCommunities(req: Request, res: Response, next: NextFunction)
+    {
+        try {
+            let payload = req.params.id;
+            console.log(payload)
+            const result = await userService.getFollowedCommunities(payload);
+
+            if(!result.length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }        
+    }
 }
