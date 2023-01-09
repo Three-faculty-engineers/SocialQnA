@@ -22,6 +22,26 @@ export class CommentService extends BaseService
         return result;
     }
 
+    async getCommentsByPostID(postID: string)
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = 
+        `
+        MATCH (p:POST)<-[:COMMENT_HAS_POST]-(c:COMMENT)-[:COMMENT_HAS_USER]->(u:USER)
+        WHERE p.id = $postID
+        OPTIONAL MATCH (ul:USER) -[l:USER_LIKES_COMMENT]-> (c)
+        OPTIONAL MATCH (ud:USER) -[d:USER_DISLIKES_COMMENT]-> (c)
+        WITH u,c,p, count(d) as dislikeCount, count(l) as likeCount, collect(ul.id) as userLikes, collect(ud.id) as userDislikes
+        RETURN {comment: c{.id, .text, .timeStamp}, user: u{.name, .id}, likes: likeCount, dislikes: dislikeCount,  userLikes: userLikes, userDislikes: userDislikes }
+        `;
+        const result = (await session.run(query, {postID})).records.map(record => record["_fields"][0]);
+
+        session.close();
+
+        return result;
+    }
+
     async create(com:CreateCommentDTO)
     {
         const session = this.neo4jDriver.session();

@@ -6,6 +6,7 @@ const commentController = new CommentController();
 const router = express.Router();
 
 router.get("/:id", commentController.get);
+router.get("/post/:postID", commentController.getCommentsByPostID);
 router.post("/", commentController.create);
 router.delete("/:id", commentController.delete);
 router.put("/:id", commentController.update);

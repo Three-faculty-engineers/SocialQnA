@@ -31,6 +31,19 @@ export class CommentController
         }
     }
 
+    async getCommentsByPostID(req:Request, res: Response, next: NextFunction)
+    {
+        try {
+            const postID = req.params.postID;
+
+            const result = await commentService.getCommentsByPostID(postID);
+
+            return sendResponse(res, result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async create(req: Request, res: Response, next: NextFunction)
     {
         try {
