@@ -78,7 +78,7 @@ export function Post(props: Props)
           <h5 className="d-flex gap-2 m-0">User: <a href={`/profile/${props.post.user?.id}`} className="text-decoration-none">{props.post.user?.username}</a></h5>
         </Card.Header>
         <Card.Header className="d-flex align-items-center">
-          <h5 className="d-flex gap-2 m-0">Community: <a href={`/profile/${props.post.community.id}`} className="text-decoration-none">{props.post.community.title}</a></h5>
+          <h5 className="d-flex gap-2 m-0">Community: <a href={`/community/${props.post.community.id}`} className="text-decoration-none">{props.post.community.title}</a></h5>
         </Card.Header>
         <Card.Body>
             <Card.Text>

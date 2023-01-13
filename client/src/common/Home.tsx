@@ -7,7 +7,7 @@ import { CreatePost } from "../post/CreatePost";
 import { Post } from "../post/Post";
 import { PostDto } from "../post/post.dto";
 import { getByFollowers, getTop10 } from "../service/post.service";
-import { get } from "../service/user.service";
+import { get, getFollowedCommunities } from "../service/user.service";
 import { UserDto } from "../user/user.dto";
 
 interface Props {
@@ -19,6 +19,7 @@ export default function Home(props: Props)
   const [posts, setPosts] = useState([] as JSX.Element[]);
   const [userAuthInfo, setUserAuthInfo] = useState({} as UserDto);
   const [top10Posts, setTop10Posts] = useState([] as JSX.Element[]);
+  const [followedCommunities, setFollowedCommunities] = useState([] as JSX.Element[]);
 
   useEffect(() => {
     getTop10Posts();
@@ -27,6 +28,7 @@ export default function Home(props: Props)
   useEffect(() => {
     getPosts();
     getAuthInfo();
+    getUserFollowedCommunities();
   }, [props.auth]);
 
   async function getPosts()
@@ -69,12 +71,35 @@ export default function Home(props: Props)
     setTop10Posts(result.data.map((post: {id: string, title: string}, index: number) => <h3 key={index}><a href={`/post/${post.id}`}>{post.title}</a></h3>))
   }
 
+  async function getUserFollowedCommunities()
+  {
+    if(!props.auth.id) return;
+
+    const result = await getFollowedCommunities(props.auth.id);
+
+    if(!result.success)
+    {
+      return;
+    }
+
+    setFollowedCommunities(result.data.map((community: {id: string, title: string}, index: number) => {
+      return (
+        <p className="h4" key={index}><a href={`/community/${community.id}`} className="text-dark">{community.title}</a></p>
+      );
+    }))
+  }
+
   return (
     <Container>
       <Row className="vh-100 my-5">
         <Col md={3} lg={3} xs={12}>
           {!!Object.keys(props.auth).length && (
-            <h3><a href={`/profile/${userAuthInfo.id}`} className="text-decoration-none text-dark">{userAuthInfo.username}</a></h3>
+            <div>
+              <h2><a href={`/profile/${userAuthInfo.id}`} className="text-decoration-none text-dark">{userAuthInfo.username}</a></h2>
+              <br />
+              <h3>Followed Communities:</h3>
+              {followedCommunities}
+            </div>
           )}
         </Col>
 

@@ -7,6 +7,8 @@ import Row from "react-bootstrap/esm/Row";
 import { CommunityDto } from './community.dto';
 import Community from './Community';
 import { CreatePost } from '../post/CreatePost';
+import { followCommunity, getFollowCommunityInfo } from '../service/user.service';
+import Button from 'react-bootstrap/esm/Button';
 interface Props {
     auth: any;
 }
@@ -15,7 +17,7 @@ function CommunityPage(props: Props) {
     const navigate = useNavigate();
     const { id } = useParams();
     const [community, setCommunity] = useState({} as CommunityDto);
-    
+    const [isFollow, setIsFollow] = useState(false);
 
     async function getCommunity()
     {
@@ -31,16 +33,58 @@ function CommunityPage(props: Props) {
         setCommunity(data.data);
     }
 
+    async function getFollowInfo()
+    {
+      if(!props.auth.id || !community.id) return;
+
+      const data = await getFollowCommunityInfo({
+        userID: props.auth.id,
+        communityID: community.id
+      });
+
+      if(!data.success)
+      {
+          return;
+      }
+
+      setIsFollow(!!data.data);
+    }
+
+    async function setFollowCommunity()
+    {
+      const data = await followCommunity({
+        userID: props.auth.id,
+        communityID: community.id,
+      })
+
+      if(!data.success)
+      {
+        return;
+      }
+
+      setIsFollow(data.data.created);
+    }
+
     useEffect(() => {
         getCommunity();
+    }, []);
 
-    }, [])
+    useEffect(() => {
+      getFollowInfo();
+    }, [props.auth]);
 
     return (
         <Container>
 
         <Row className="vh-100 mt-5">
           <Col md={3} lg={3} xs={12}>
+          {!!props.auth.id && (
+                <div>
+                    <Button variant={isFollow ? "danger" : "info"} onClick={setFollowCommunity}>
+                      {isFollow ? "Unfollow" : "Follow"}
+                    </Button>
+                </div>
+            )}
           </Col>
           <Col md={6} lg={6} xs={12}>
             <Community community={community} auth={props.auth}/>
