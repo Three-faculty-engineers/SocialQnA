@@ -249,6 +249,23 @@ export class UserService extends BaseService {
         return result;
     }
 
+    async getFollowCommunityInfo(payload: {userID: string, communityID: string})
+    {
+        const session = this.neo4jDriver.session();
+
+        const query = `
+        MATCH
+            (u: Users {id: $userID}) -[f:follows]-> (c: Communities {id: $communityID})
+        RETURN f
+        `;
+
+        const result = this.getRecordDataFromNeo(await session.run(query, payload));
+
+        session.close();
+
+        return result;
+    }
+
     async getFollowedCommunities(id: string)
     {
         const session = this.neo4jDriver.session();
