@@ -28,10 +28,10 @@ export class CommentService extends BaseService
 
         const query = 
         `
-        MATCH (p:POST)<-[:COMMENT_HAS_POST]-(c:COMMENT)-[:COMMENT_HAS_USER]->(u:USER)
+        MATCH (p:Posts)<-[:COMMENT_HAS_POST]-(c:Comments)-[:COMMENT_HAS_USER]->(u:Users)
         WHERE p.id = $postID
-        OPTIONAL MATCH (ul:USER) -[l:USER_LIKES_COMMENT]-> (c)
-        OPTIONAL MATCH (ud:USER) -[d:USER_DISLIKES_COMMENT]-> (c)
+        OPTIONAL MATCH (ul:Users) -[l:likes]-> (c)
+        OPTIONAL MATCH (ud:Users) -[d:dislikes]-> (c)
         WITH u,c,p, count(d) as dislikeCount, count(l) as likeCount, collect(ul.id) as userLikes, collect(ud.id) as userDislikes
         RETURN {comment: c{.id, .text, .timeStamp}, user: u{.name, .id}, likes: likeCount, dislikes: dislikeCount,  userLikes: userLikes, userDislikes: userDislikes }
         `;
@@ -49,9 +49,9 @@ export class CommentService extends BaseService
         const query = 
         `
         MATCH
-        (u:USER {id: $userID}),
-        (p:POST {id: $postID})
-        MERGE(c:COMMENT {id: randomUUID(), text: $text, timeStamp: dateTime()}) 
+        (u:Users {id: $userID}),
+        (p:Posts {id: $postID})
+        MERGE(c:Comments {id: randomUUID(), text: $text, timeStamp: dateTime()}) 
         MERGE (u)-[:USER_HAS_COMMENT]->(c)    
         MERGE (c)-[:COMMENT_HAS_USER]->(u)
         MERGE (c)-[:COMMENT_HAS_POST]->(p)
@@ -71,7 +71,7 @@ export class CommentService extends BaseService
         const session = this.neo4jDriver.session();
 
         const query = 
-        `MATCH (n: COMMENT {id: $id})
+        `MATCH (n: Comments {id: $id})
         SET n.text = $text
         RETURN n
         `

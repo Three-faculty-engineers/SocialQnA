@@ -7,9 +7,13 @@ const router = express.Router();
 
 router.get("/:id", commentController.get);
 router.get("/post/:postID", commentController.getCommentsByPostID);
+
 router.post("/", commentController.create);
+
 router.delete("/:id", commentController.delete);
+
 router.put("/:id", commentController.update);
+
 // router.get("/user/:userID", postController.getByUserID);
 // router.get("/community/:communityID", postController.getByCommunityID);
 // router.post("/", postController.create);
