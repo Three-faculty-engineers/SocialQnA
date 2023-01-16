@@ -13,11 +13,20 @@ export async function getByPostID(postID: string)
     return result;
 }
 
-export async function create(comment: CommentDto)
+export async function create(comment: {text: string, userID: string,  postID: string | undefined})
 {
     const result = await fetchResult(`${BASE_URL}/`, {
         method: "POST",
         payload: comment,
+        token: localStorage.getItem("token")!
+    });
+    return result;
+}
+
+export async function remove(commentID: string)
+{
+    const result = await fetchResult(`${BASE_URL}/${commentID}`, {
+        method: "DELETE",
         token: localStorage.getItem("token")!
     });
     return result;

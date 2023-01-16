@@ -6,7 +6,7 @@ import { create } from "../service/comment.service";
 import { CommentDto } from './comment.dto';
 interface Props {
     userID: string;
-    postID: string;
+    postID: string | undefined;
     OnCreate?: () => void;
 }
   
@@ -24,8 +24,8 @@ function CreateComment(props: Props) {
         return;
       }
 
-      const commentDto = {"text" : comment, "userID": props.userID, "postID": props.postID}
-      const result = await create(commentDto as CommentDto)
+      const commentDto = {text : comment, userID: props.userID, postID: props.postID}
+      const result = await create(commentDto)
       
       if(!result.success)
       {
@@ -66,17 +66,17 @@ function CreateComment(props: Props) {
         <Modal show={isModalOpen} onHide={toggleModal}>
 
         <Modal.Header closeButton>
-            <Modal.Title>Dodaj community</Modal.Title>
+            <Modal.Title>Post comment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form.Group className="mb-3" controlId="formTitle">
 
           <Form.Label className="text-center">
-              Title
+              Text:
           </Form.Label>
           <Form.Control
           type="text"
-          placeholder="Unesite naslov"
+          placeholder="Unesite tekst"
           value={comment}
           name="text"
           onChange={handleOnChange}

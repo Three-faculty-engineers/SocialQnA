@@ -1,11 +1,14 @@
+import { UserDto } from "../user/user.dto";
 
 export interface CommentDto
 {
     id: string;
     text: string;
     timeStamp: Date;
-    userID: string;
+    user: UserDto;
     postID: string;    
     likes?: number;
-    dislikes?: number;  
+    dislikes?: number;
+    userLikes: string[];
+    userDislikes: string[];
 }
