@@ -53,6 +53,24 @@ export async function getFollowUserInfo({userFollowID, userFollowingID}: {userFo
     return result;
 }
 
+export async function getFollowCommunityInfo({userID, communityID}: {userID: string, communityID: string})
+{
+    const result = await fetchResult(`${BASE_URL}/${userID}/follow/community/${communityID}`, {
+        method: "GET"
+    })
+
+    return result;
+}
+
+export async function getFollowedCommunities(userID: string)
+{
+    const result = await fetchResult(`${BASE_URL}/${userID}/followedCommunities`, {
+        method: "GET"
+    });
+
+    return result;
+}
+
 export async function likePost(payload: {userID: string, postID: string})
 {
     const result = await fetchResult(`${BASE_URL}/like/post`, {

@@ -10,7 +10,7 @@ const app = express();
 
 app.use(express.urlencoded({extended: false})); //citanje JSON fajlova, deserijalizacija json podataka. client-> server. format(0,1); use za sve CRUD metode
 app.use(express.json());
-app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(cors());
 app.use(helmet({ contentSecurityPolicy: false })); //http header analogija; atributi headera analogija
 
 route(app);
