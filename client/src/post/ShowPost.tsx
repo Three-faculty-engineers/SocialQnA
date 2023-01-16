@@ -27,7 +27,6 @@ export function ShowPost(props: Props)
             return navigate("/error404");
         }
 
-
         setPost(data.data);
 
         await visitPost(id);
@@ -41,6 +40,10 @@ export function ShowPost(props: Props)
     useEffect(()=> {
         getPost();
     }, [])
+
+    useEffect(()=> {
+      getPost();
+  }, [props.auth])
 
     return (
         <Container>

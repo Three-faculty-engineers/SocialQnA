@@ -20,8 +20,8 @@ export function Post(props: Props)
     const [dislike, setDislike] = useState({isDislike: false, dislikeCounter: 0});
 
     useEffect(() => {
-      setLike({isLike: !!props.userID && props.post.userLikes.some(el => props.userID === el), likeCounter: props.post.likes!});
-      setDislike({isDislike: !!props.userID && props.post.userDislikes.some(el => props.userID === el), dislikeCounter: props.post.dislikes});
+      setLike({isLike: !!props.userID && props.post.userLikes.some(el => props.userID === el), likeCounter: +props.post.likes!});
+      setDislike({isDislike: !!props.userID && props.post.userDislikes.some(el => props.userID === el), dislikeCounter: +props.post.dislikes});
     }, [props.post]);
 
     async function handleLikeClick()
