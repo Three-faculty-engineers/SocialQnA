@@ -37,7 +37,7 @@ export class CommentController
             const postID = req.params.postID;
 
             const result = await commentService.getCommentsByPostID(postID);
-
+            
             return sendResponse(res, result);
         } catch (error) {
             next(error);

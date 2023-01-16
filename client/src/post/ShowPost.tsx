@@ -3,6 +3,7 @@ import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { useNavigate, useParams } from "react-router-dom";
+import CreateComment from "../comment/CreateComment";
 import { get, visitPost } from "../service/post.service";
 import { Post } from "./Post";
 import { PostDto } from "./post.dto";
@@ -52,6 +53,10 @@ export function ShowPost(props: Props)
           </Col>
           <Col md={3} lg={3} xs={12}>
           </Col>
+        </Row>
+        <Row>
+          <h2>test</h2>
+          <CreateComment userID = {props.auth.id} postID = {post.id}/>
         </Row>
       </Container>
     );
