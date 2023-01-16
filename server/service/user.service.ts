@@ -110,6 +110,25 @@ export class UserService extends BaseService {
         `
         const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
+        if(result.relationshipsCreated)
+        {
+            await this.setExpressionInRedis({
+                entityType: "post",
+                id: payload.postID,
+                expressionType: "likes",
+                userID: payload.userID
+            })
+        }
+        else
+        {
+            await this.unsetExpressionInRedis({
+                entityType: "post",
+                id: payload.postID,
+                expressionType: "likes",
+                userID: payload.userID
+            })
+        }
+
         session.close();
 
         return result.relationshipsCreated ? { created: true } : {created: false}; 
@@ -132,6 +151,25 @@ export class UserService extends BaseService {
         DELETE r
         `
         const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
+
+        if(result.relationshipsCreated)
+        {
+            await this.setExpressionInRedis({
+                entityType: "post",
+                id: payload.postID,
+                expressionType: "dislikes",
+                userID: payload.userID
+            })
+        }
+        else
+        {
+            await this.unsetExpressionInRedis({
+                entityType: "post",
+                id: payload.postID,
+                expressionType: "dislikes",
+                userID: payload.userID
+            })
+        }
 
         session.close();
 
@@ -156,6 +194,25 @@ export class UserService extends BaseService {
         `
         const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
 
+        if(result.relationshipsCreated)
+        {
+            await this.setExpressionInRedis({
+                entityType: "comment",
+                id: payload.commentID,
+                expressionType: "likes",
+                userID: payload.userID
+            })
+        }
+        else
+        {
+            await this.unsetExpressionInRedis({
+                entityType: "comment",
+                id: payload.commentID,
+                expressionType: "likes",
+                userID: payload.userID
+            })
+        }
+
         session.close();
 
         return result.relationshipsCreated ? { created: true } : {created: false};
@@ -178,6 +235,25 @@ export class UserService extends BaseService {
         DELETE r
         `
         const result = (await session.run(query, payload)).summary.updateStatistics["_stats"];
+
+        if(result.relationshipsCreated)
+        {
+            await this.setExpressionInRedis({
+                entityType: "comment",
+                id: payload.commentID,
+                expressionType: "dislikes",
+                userID: payload.userID
+            })
+        }
+        else
+        {
+            await this.unsetExpressionInRedis({
+                entityType: "comment",
+                id: payload.commentID,
+                expressionType: "dislikes",
+                userID: payload.userID
+            })
+        }
 
         session.close();
 
@@ -281,5 +357,19 @@ export class UserService extends BaseService {
         session.close();
 
         return result;
+    }
+    
+    async setExpressionInRedis({entityType, id, expressionType, userID}: {entityType: string, id: string, expressionType: string, userID: string})
+    {
+        await this.redisDriver.incr(`${entityType}:${id}:${expressionType}`);
+
+        await this.redisDriver.sAdd(`${entityType}:${id}:${expressionType}-users`, [userID]);
+    }
+
+    async unsetExpressionInRedis({entityType, id, expressionType, userID}: {entityType: string, id: string, expressionType: string, userID: string})
+    {
+        await this.redisDriver.decr(`${entityType}:${id}:${expressionType}`);
+
+        await this.redisDriver.sRem(`${entityType}:${id}:${expressionType}-users`, [userID]);
     }
 }

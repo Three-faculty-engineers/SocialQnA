@@ -80,6 +80,10 @@ export function ShowPost(props: Props)
         getComments();
     }, [])
 
+    useEffect(()=> {
+      getPost();
+  }, [props.auth])
+
     return (
         <Container>
         <Row className="mt-5">
