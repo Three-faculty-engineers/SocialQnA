@@ -17,13 +17,13 @@ function Comment(props: Props) {
   const [dislike, setDislike] = useState({isDislike: false, dislikeCounter: 0});
 
   useEffect(() => {
-    setLike({isLike: !!props.userID && props.comment.userLikes.some(el => props.userID === el), likeCounter: props.comment.likes!});
-    setDislike({isDislike: !!props.userID && props.comment.userDislikes.some(el => props.userID === el), dislikeCounter: props.comment.dislikes!});
+    setLike({isLike: !!props.userID && props.comment.userLikes.some(el => props.userID === el), likeCounter: +props.comment.likes!});
+    setDislike({isDislike: !!props.userID && props.comment.userDislikes.some(el => props.userID === el), dislikeCounter: +props.comment.dislikes!});
   }, [props.comment]);
 
 
   useEffect(() => {
-
+    
   }, [props.comment])
   
   async function handleLikeClick()

@@ -54,7 +54,6 @@ export function ShowPost(props: Props)
       }
 
       let komentari: CommentDto[];
-      console.log(data.data)
       komentari = data.data.map((c: any) => {return {
         id:c.comment.id,
         text:c.comment.text,
