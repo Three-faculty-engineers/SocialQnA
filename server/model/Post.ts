@@ -11,7 +11,7 @@ export interface Post extends IModel
     timeStamp: Date;
     author: User;
     community: Community;
-    userLikes?: UserLikePost[];
-    userDislikes?: User[];  
-    comments?: Comment[];
+    // userLikes?: UserLikePost[];
+    // userDislikes?: User[];  
+    // comments?: Comment[];
 }

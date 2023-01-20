@@ -51,13 +51,11 @@ export class CommentService extends BaseService
         MATCH
         (u:Users {id: $userID}),
         (p:Posts {id: $postID})
-        MERGE(c:Comments {id: randomUUID(), text: $text, timeStamp: dateTime()}) 
-        MERGE (u)-[:USER_HAS_COMMENT]->(c)    
+        MERGE(c:Comments {id: randomUUID(), text: $text, timeStamp: dateTime()})     
         MERGE (c)-[:COMMENT_HAS_USER]->(u)
         MERGE (c)-[:COMMENT_HAS_POST]->(p)
-        MERGE (p)-[:POST_HAS_COMMENT]->(c)
         RETURN c
-        `; //Veze su napravljenje u oba smera. Ako bespotrebno usloznjava podatke, onda jedan smer.(za kasnije)
+        `; 
         const result = this.getRecordDataFromNeo(await session.run(query, com));
 
         session.close();

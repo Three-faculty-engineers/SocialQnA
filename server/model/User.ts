@@ -7,11 +7,11 @@ export interface User extends IModel
     username: string;
     password: string;
     email: string;
-    posts?: Post[];
-    comments?: Comment[];
-    likedPosts?: Post[];
-    dislikedPosts?: Post[];
-    likedComments?: Comment[];
-    dislikedComments?: Comment[];
-    followedCommunities?: Community[];
+    // posts?: Post[];
+    // comments?: Comment[];
+    // likedPosts?: Post[];
+    // dislikedPosts?: Post[];
+    // likedComments?: Comment[];
+    // dislikedComments?: Comment[];
+    // followedCommunities?: Community[];
 }

@@ -8,6 +8,6 @@ export interface Comment extends IModel
     timeStamp: Date;
     post: Post; //fakticki tip ne treba nam objekat vec broj/string za ID samo?
     user: User;
-    likes?: User[];
-    dislikes?: User[];
+    // likes?: User[];
+    // dislikes?: User[];
 }
