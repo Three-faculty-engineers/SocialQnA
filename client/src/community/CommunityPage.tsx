@@ -92,11 +92,7 @@ function CommunityPage(props: Props) {
           <Col md={3} lg={3} xs={12}>
           </Col>
         </Row>
-        <Row>
-        <div className="d-flex justify-content-center">
-            <CreatePost></CreatePost>
-          </div>
-        </Row>
+
       </Container>
     )
 }

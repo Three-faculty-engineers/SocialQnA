@@ -74,6 +74,11 @@ export function ShowPost(props: Props)
         navigate("/");
     }
 
+    function removeComment(comment: CommentDto)
+    {
+      setComments(comments.filter((el) => el.id != comment.id))
+    }
+
     useEffect(()=> {
         getPost();
         getComments();
@@ -104,6 +109,7 @@ export function ShowPost(props: Props)
             <Comment
               comment={comment}
               userID={props.auth.id}
+              OnRemove={() => removeComment(comment)}
             />
           </Col>
           <Col md={4} lg={4} xs={12}>
@@ -116,7 +122,7 @@ export function ShowPost(props: Props)
           </Col>
           <Col md={4} lg={4} xs={12} >
             <div className="d-flex justify-content-center">
-             <CreateComment userID={props.auth.id} postID={id}/>
+             <CreateComment userID={props.auth.id} postID={id} OnCreate={() => { getComments()}}/>
             </div>
           </Col>
           <Col md={4} lg={4} xs={12}>

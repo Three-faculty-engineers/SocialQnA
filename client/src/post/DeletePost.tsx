@@ -25,7 +25,11 @@ export function DeletePost(props: Props)
         return;
       }
 
-      props.OnRemove!();
+      if(props.OnRemove)
+      {
+        setIsModalOpen(false);
+        props.OnRemove();
+      }
     }
 
     function showModal()

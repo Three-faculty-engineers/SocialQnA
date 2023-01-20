@@ -6,6 +6,7 @@ import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { Post } from '../post/Post';
+import { CreatePost } from '../post/CreatePost';
 
 interface Props {
     auth: any;
@@ -34,8 +35,13 @@ function Community(props: Props) {
         getPosts();
     }, [props.community])
 
+    function removePost(post: PostDto)
+    {
+        setPosts(posts.filter((el) => el.id != post.id))
+    }
+
     const postsElements: JSX.Element[] = [];
-    posts.forEach((post, index) => postsElements.push(<Post post={post} key={index} userID={props.auth.id}></Post>));
+    posts.forEach((post, index) => postsElements.push(<Post post={post} key={index} userID={props.auth.id} OnRemove = {() => {removePost(post)}}></Post>));
 
     return (
         <Container>
@@ -43,7 +49,7 @@ function Community(props: Props) {
             <h1>{props.community.title}</h1>
             <h2>{props.community.description}</h2>
         </Row>
-        <Row className="vh-100 mt-5">
+        <Row className="mt-5">
         <Col md={1} lg={1} xs={12}>
         </Col>
         <Col md={10} lg={10} xs={12}>
@@ -53,6 +59,11 @@ function Community(props: Props) {
         </Col>
         <Col md={1} lg={1} xs={12}>
         </Col>
+        </Row>
+        <Row>
+         <div className="d-flex justify-content-center">
+            <CreatePost OnCreate={() => {getPosts()}} />
+          </div>
         </Row>
     </Container>
     )

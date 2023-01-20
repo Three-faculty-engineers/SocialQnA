@@ -37,7 +37,9 @@ function CreateComment(props: Props) {
 
       if(props.OnCreate)
       {
+        setIsModalOpen(false);
         props.OnCreate();
+
       }
 
     }

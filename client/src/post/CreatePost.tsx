@@ -35,6 +35,7 @@ export function CreatePost(props: Props) {
 
       if(props.OnCreate)
       {
+        setIsModalOpen(false);
         props.OnCreate();
       }
     }

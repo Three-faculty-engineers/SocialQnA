@@ -27,8 +27,12 @@ function DeleteComment(props: Props) {
         alert("Something goes wrong. Please try again");
         return;
       }
-      alert("Comment has been successfully removed")
-      //props.OnRemove!();
+      if(props.OnRemove)
+      {
+        setIsModalOpen(false);
+        props.OnRemove();
+      }
+      
     }
 
     function showModal()

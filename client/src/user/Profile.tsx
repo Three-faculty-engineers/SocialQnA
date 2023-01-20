@@ -45,6 +45,15 @@ export function Profile(props: Props) {
         setPosts(data.data);
 
     }
+    function addPost(post: PostDto)
+    {
+        setPosts([...posts, post]);
+    }
+
+    function removePost(post: PostDto)
+    {
+        setPosts(posts.filter((el) => el.id != post.id))
+    }
 
     useEffect(() => {
         getUser();
@@ -52,7 +61,7 @@ export function Profile(props: Props) {
     }, []);
 
     const postsElements: JSX.Element[] = [];
-    posts.forEach((post, index) => postsElements.push(<Post post={post} key={index} userID={props.auth.id}></Post>));
+    posts.forEach((post, index) => postsElements.push(<Post post={post} key={index} userID={props.auth.id} OnRemove={() => {removePost(post)} }></Post>));
 
     return (
         <Container>

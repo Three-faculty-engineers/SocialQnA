@@ -8,7 +8,9 @@ import DeleteComment from './DeleteComment'
 
 interface Props {
   comment: CommentDto,
-  userID: string
+  userID: string,
+  OnRemove?: () => void;
+
 }
 
 function Comment(props: Props) {
@@ -70,7 +72,7 @@ function Comment(props: Props) {
         <div className="ms-auto d-flex gap-3">
           {props.comment.user.id === props.userID && (
             <div className="d-flex gap-3">
-                <DeleteComment id={props.comment.id} />
+                <DeleteComment id={props.comment.id} OnRemove={props.OnRemove} />
             </div>
           )}
         </div>
