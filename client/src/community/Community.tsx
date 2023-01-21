@@ -49,6 +49,11 @@ function Community(props: Props) {
             <h1 className='p-3 border-bottom'>{props.community.title}</h1>
             <h3 className='p-3'>{props.community.description}</h3>
         </Row>
+        <Row>
+        <div className="d-flex justify-content-center shadow p-3 bg-white rounded">
+            <CreatePost Community={props.community} OnCreate={() => {getPosts()}} />
+          </div>
+        </Row>
         <Row className="mt-5">
         <Col md={1} lg={1} xs={12}>
         </Col>
@@ -62,11 +67,7 @@ function Community(props: Props) {
         <Col md={1} lg={1} xs={12}>
         </Col>
         </Row>
-        <Row>
-         <div className="d-flex justify-content-center">
-            <CreatePost Community={props.community} OnCreate={() => {getPosts()}} />
-          </div>
-        </Row>
+
     </Container>
     )
 }
