@@ -61,9 +61,14 @@ export function Post(props: Props)
     }
     
     return (
-      <Card className="shadow my-3">
-        <Card.Header className="d-flex">
-          <h4 className="m-0"><a href={`/post/${props.post.id}`} className="text-decoration-none text-dark">{props.post.title}</a></h4>
+      <Card className="shadow my-3 border-white">
+        <Card.Header className="d-flex bg-white">
+          <div className="d-flex align-items-center">
+            <div>
+              <a href={`/profile/${props.post.user?.id}`} className="link-secondary text-decoration-none">{props.post.user?.username}</a>, 
+              <a href={`/community/${props.post.community.id}`} className="text-decoration-none link-secondary ms-2">{props.post.community.title}</a>
+            </div>
+          </div>
           <div className="ms-auto d-flex gap-3">
             {props.post.user!.id === props.userID && (
               <div className="d-flex gap-3">
@@ -74,24 +79,25 @@ export function Post(props: Props)
             <PostEditHistory id={props.post.id}></PostEditHistory>
           </div>
         </Card.Header>
-        <Card.Header className="d-flex align-items-center">
+        {/* <Card.Header className="d-flex align-items-center bg-white">
           <h5 className="d-flex gap-2 m-0">User: <a href={`/profile/${props.post.user?.id}`} className="text-decoration-none">{props.post.user?.username}</a></h5>
         </Card.Header>
-        <Card.Header className="d-flex align-items-center">
+        <Card.Header className="d-flex align-items-center bg-white">
           <h5 className="d-flex gap-2 m-0">Community: <a href={`/community/${props.post.community.id}`} className="text-decoration-none">{props.post.community.title}</a></h5>
-        </Card.Header>
+        </Card.Header> */}
         <Card.Body>
+            <h4 className="mb-3"><a href={`/post/${props.post.id}`} className="text-decoration-none text-dark">{props.post.title}</a></h4>
             <Card.Text>
                 {props.post.text}
             </Card.Text>
         </Card.Body>
-        <Card.Footer>
+        <Card.Footer className="bg-white">
             {!!props.userID && !!props.post && (
               <div className="d-flex gap-3">
-                <Button variant="light" onClick={handleLikeClick}>
+                <Button variant="transparent" onClick={handleLikeClick}>
                   <i className={`fa fa-thumbs-up ${like.isLike ? "text-success" : "text-secondary"}`}></i> {like.likeCounter}
                 </Button>
-                <Button variant="light" onClick={handleDislikeClick}>
+                <Button variant="transparent" onClick={handleDislikeClick}>
                   <i className={`fa fa-thumbs-down ${dislike.isDislike ? "text-danger" : "text-secondary"}`}></i> {dislike.dislikeCounter}
                 </Button>
               </div>

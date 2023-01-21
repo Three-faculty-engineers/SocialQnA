@@ -60,8 +60,8 @@ export function UpdatePost(props: Props)
     return (
         <Form onSubmit={handleOnSubmit} className="d-flex">
           <div className="d-grid">
-            <Button variant="info" onClick={showModal}>
-              Izmeni
+            <Button variant="transparent" onClick={showModal}>
+              <i className="fa fa-pencil text-danger"></i>
             </Button>
           </div>
           <Modal show={isModalOpen} onHide={handleClose}>

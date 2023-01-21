@@ -12,7 +12,6 @@ import { login } from "../../service/auth.service";
 
 export default function Login() {
   const [alerts, setAlerts] = useState([] as string[]);
-  const navigate = useNavigate();
 
   async function handleOnSubmit(e:any) {
     e.preventDefault();
@@ -32,7 +31,7 @@ export default function Login() {
 
     localStorage.setItem("token", data.data);
 
-    return navigate("/");
+    window.location.href = "/";
   }
 
   return (
@@ -40,7 +39,7 @@ export default function Login() {
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
-            <div className="border border-3 border-primary"></div>
+            <div className="border border-3 border-danger"></div>
             <Card className="shadow">
               <Alerts alerts={alerts}></Alerts>
               <Card.Body>
@@ -67,14 +66,9 @@ export default function Login() {
                         className="mb-3"
                         controlId="formBasicCheckbox"
                       >
-                        <p className="small">
-                          <a className="text-primary" href="#!">
-                            Forgot password?
-                          </a>
-                        </p>
                       </Form.Group>
                       <div className="d-grid">
-                        <Button variant="primary" type="submit">
+                        <Button variant="danger" type="submit">
                           Login
                         </Button>
                       </div>
@@ -82,7 +76,7 @@ export default function Login() {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Don't have an account?{" "}
-                        <a href="/register" className="text-primary fw-bold">
+                        <a href="/register" className="text-danger fw-bold">
                           Sign Up
                         </a>
                       </p>

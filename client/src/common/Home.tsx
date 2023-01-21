@@ -68,7 +68,7 @@ export default function Home(props: Props)
       return;
     }
 
-    setTop10Posts(result.data.map((post: {id: string, title: string}, index: number) => <h3 key={index}><a href={`/post/${post.id}`}>{post.title}</a></h3>))
+    setTop10Posts(result.data.map((post: {id: string, title: string}, index: number) => <h4 key={index} className={`${index === 0 && "border-top"} border-bottom mb-0 text-center`}><a href={`/post/${post.id}`} className="text-dark text-decoration-none d-block py-3 px-3">{post.title}</a></h4>))
   }
 
   async function getUserFollowedCommunities()
@@ -84,7 +84,7 @@ export default function Home(props: Props)
 
     setFollowedCommunities(result.data.map((community: {id: string, title: string}, index: number) => {
       return (
-        <p className="h4" key={index}><a href={`/community/${community.id}`} className="text-dark">{community.title}</a></p>
+        <p className="my-3" key={index}><a href={`/community/${community.id}`} className="text-dark text-decoration-none">{community.title}</a></p>
       );
     }))
   }
@@ -95,37 +95,49 @@ export default function Home(props: Props)
         <Col md={3} lg={3} xs={12}>
           {!!Object.keys(props.auth).length && (
             <div>
-              <h2><a href={`/profile/${userAuthInfo.id}`} className="text-decoration-none text-dark">{userAuthInfo.username}</a></h2>
-              <br />
-              <h3>Followed Communities:</h3>
-              {followedCommunities}
+              <div className="shadow p-3 mb-4 bg-white rounded">
+                <h5 className="text-center"><a href={`/profile/${userAuthInfo.id}`} className="text-decoration-none text-dark">{userAuthInfo.username}</a></h5>
+              </div>
+              
+              <div className="shadow p-3 mb-5 bg-white rounded">
+                <CreateCommunity/>
+                <h5>Followed Communities:</h5>
+                {followedCommunities}
+              </div>
             </div>
           )}
         </Col>
 
         {!Object.keys(props.auth).length ? (
           <Col md={6} lg={6} xs={12}>
-            <h1 className="text-center">Welcome!</h1>
+            <div className="shadow p-3 mb-5 bg-white rounded">
+              <h1 className="text-center">Welcome!</h1>
+            </div>
           </Col>
         ) : (
           
         <Col md={6} lg={6} xs={12}>
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
             <CreatePost></CreatePost>
           </div>
-          <div className="d-flex justify-content-center">
-            <CreateCommunity/>
-          </div>
           {!posts.length && (
-            <h3 className="text-center">Trenutno nema nijedan post</h3>
+            <div className="shadow p-3 mb-5 bg-white rounded">
+              <h3 className="text-center">Trenutno nema nijedan post</h3>
+            </div>
           ) || (
             posts
           )}
         </Col>
         )}
-        <Col md={3} lg={3} xs={12} className="text-center">
-          <h2>Top 10 najcitanijih</h2>
-          {top10Posts}
+        <Col md={3} lg={3} xs={12}>
+          <div className="shadow p-3 mb-5 bg-white rounded">
+            <div className="mb-5 text-center">
+              <h4>Top 10 most viewed</h4>
+            </div>
+            <div className="mb-3">
+              {top10Posts}
+            </div>
+          </div>
         </Col>
       </Row>
     </Container>

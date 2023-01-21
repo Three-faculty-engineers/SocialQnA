@@ -79,8 +79,8 @@ export function CreatePost(props: Props) {
     return(
         <Form onSubmit={handleOnSubmit} className="d-flex">
           <div className="d-grid">
-            <Button variant="info" onClick={showModal} className="rounded-circle px-4 py-2">
-              <span className="h1 text-light">+</span>
+            <Button variant="danger" onClick={showModal} className="rounded-pill">
+              <span className="h5">+ Add question</span>
             </Button>
           </div>
           <Modal show={isModalOpen} onHide={handleClose}>
@@ -88,11 +88,13 @@ export function CreatePost(props: Props) {
               <Modal.Title>Dodaj post</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <Form.Group className="mb-3" controlId="formTitle">
+          <Form.Group className="mb-3" controlId="formSelect">
                 <Form.Select name="communityID" onChange={handleOnChange}>
                     <option value={0}>Community</option>
                     {communities}
                 </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formTitle">
                 <Form.Label className="text-center">
                     Title
                 </Form.Label>
@@ -122,7 +124,7 @@ export function CreatePost(props: Props) {
               <Button variant="secondary" onClick={handleClose}>
               Otkazi
               </Button>
-              <Button variant="success" type="submit" onClick={handleOnSubmit}>
+              <Button variant="danger" type="submit" onClick={handleOnSubmit}>
               Dodaj
               </Button>
           </Modal.Footer>

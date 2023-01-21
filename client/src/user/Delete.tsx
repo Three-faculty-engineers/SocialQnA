@@ -44,7 +44,7 @@ export function DeleteUser(props: Props)
     return (
       <Form onSubmit={handleOnSubmit}>
         <div className="d-grid">
-          <Button variant="danger" onClick={showModal}>
+          <Button variant="secondary" onClick={showModal}>
             Obrisi
           </Button>
         </div>

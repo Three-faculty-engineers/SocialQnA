@@ -63,9 +63,9 @@ function CreateCommunity(props: Props) {
   return (
     <Form onSubmit={handleOnSubmit} className="d-flex">
 
-    <div className="d-grid">
-      <Button variant="info" onClick={toggleModal} className="rounded-circle px-4 py-2">
-        <span className="h1 text-light">+</span>
+    <div className="d-grid mb-3">
+      <Button variant="outline-danger" onClick={toggleModal} className="rounded-pill">
+        <span>+ Add Community</span>
       </Button>
     </div>
 

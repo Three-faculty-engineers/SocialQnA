@@ -46,8 +46,8 @@ export function DeletePost(props: Props)
     return (
         <Form onSubmit={handleOnSubmit} className="d-flex">
           <div className="d-grid">
-            <Button variant="danger" onClick={showModal}>
-              Obrisi
+            <Button variant="transparent" onClick={showModal}>
+              <i className="fa fa-trash text-danger"></i>
             </Button>
           </div>
           <Modal show={isModalOpen} onHide={handleClose}>

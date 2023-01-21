@@ -43,21 +43,21 @@ export function PostEditHistory(props: Props)
     return (
       <>
         {history.length > 0 && (
-            <Button variant="secondary" onClick={showModal}>
-            Istorija izmena
+            <Button variant="tranparent" onClick={showModal}>
+                <i className="fa fa-history text-danger"></i>
             </Button>
         )}
         {history.length > 0 && (
             <Modal show={isModalOpen} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Istorija izmena</Modal.Title>
+                    <Modal.Title>Change History</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {history}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                    Zatvori
+                    Close
                     </Button>
                 </Modal.Footer>
             </Modal>

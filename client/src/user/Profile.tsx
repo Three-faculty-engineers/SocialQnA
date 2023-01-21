@@ -72,7 +72,9 @@ export function Profile(props: Props) {
           </Col>
           <Col md={6} lg={6} xs={12}>
             {posts.length ? postsElements : (
-                <h5>Korisnik trenutno nema nijedan postavljen post</h5>
+                <div className="shadow p-3 mb-5 bg-white rounded">
+                    <h5 className="text-center">Korisnik trenutno nema nijedan postavljen post</h5>
+                </div>
             )}
           </Col>
           <Col md={3} lg={3} xs={12}>

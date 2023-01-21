@@ -37,7 +37,7 @@ export function Register() {
         <Container>
           <Row className="vh-100 d-flex justify-content-center align-items-center">
             <Col md={8} lg={6} xs={12}>
-              <div className="border border-3 border-primary"></div>
+              <div className="border border-3 border-danger"></div>
               <Card className="shadow">
                 <Alerts alerts={alerts} />
                 <Card.Body>
@@ -98,7 +98,7 @@ export function Register() {
                         </Form.Group>
 
                         <div className="d-grid">
-                          <Button variant="primary" type="submit">
+                          <Button variant="danger" type="submit">
                             Sign Up
                           </Button>
                         </div>
@@ -106,7 +106,7 @@ export function Register() {
                       <div className="mt-3">
                         <p className="mb-0  text-center">
                           Already have an account?{" "}
-                          <a href="/login" className="text-primary fw-bold">
+                          <a href="/login" className="text-danger fw-bold">
                             Log In
                           </a>
                         </p>
