@@ -13,6 +13,10 @@ export class CommunityController
     {
         try {
             const community = req.body as Community;
+            
+            const testUnique = communityService.getByTitle(community.title);
+
+            if((await testUnique).length) throw new ApplicationError(httpErrorTypes.RESOURCE_NOT_FOUND);
 
             await communityCreateScheme.parseAsync(community);
 
@@ -20,8 +24,8 @@ export class CommunityController
                 community.image_url = "default_img.png"
 
             const payload = await communityService.create(community);
-
-            return sendResponse(res, payload);
+            
+            return sendResponse(res, payload[0]);
         } catch (error) {
             next(error);
         }

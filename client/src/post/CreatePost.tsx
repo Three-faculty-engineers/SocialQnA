@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
+import Community from "../community/Community";
+import { CommunityDto } from "../community/community.dto";
 import { getAll } from "../service/community.service";
 import { create } from "../service/post.service";
 import { PostDto } from "./post.dto";
 
 interface Props {
     OnCreate?: () => void;
+    Community?: CommunityDto;
 }
 
 export function CreatePost(props: Props) {
@@ -17,12 +20,16 @@ export function CreatePost(props: Props) {
 
     async function handleOnSubmit()
     {
-      if(!post.communityID)
-      {
-        alert("Izaberite zajednicu!");
-        return;
+      if(!props.Community){
+        if(!post.communityID)
+        {
+          alert("Izaberite zajednicu!");
+          return;
+        }
       }
-
+      else{
+        post.communityID = props.Community.id;
+      }
       const result = await create(post as PostDto);
 
       if(!result.success)
@@ -88,12 +95,14 @@ export function CreatePost(props: Props) {
               <Modal.Title>Dodaj post</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <Form.Group className="mb-3" controlId="formSelect">
+            {!props.Community && (
+            <Form.Group className="mb-3" controlId="formSelect">
                 <Form.Select name="communityID" onChange={handleOnChange}>
                     <option value={0}>Community</option>
                     {communities}
                 </Form.Select>
             </Form.Group>
+            )}
             <Form.Group className="mb-3" controlId="formTitle">
                 <Form.Label className="text-center">
                     Title

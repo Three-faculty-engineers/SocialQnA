@@ -33,8 +33,6 @@ function CreateComment(props: Props) {
         return;
       }
 
-      alert("Comment sent");
-
       if(props.OnCreate)
       {
         setIsModalOpen(false);
@@ -60,8 +58,8 @@ function CreateComment(props: Props) {
     <Form onSubmit={handleOnSubmit} className="d-flex">
 
         <div className="d-grid">
-            <Button variant="info" onClick={toggleModal} className="rounded-circle px-4 py-2">
-                <span className="h1 text-light">+</span>
+            <Button variant="danger" onClick={toggleModal} className="rounded-pill">
+              <span className="h5">+ Add comment</span>
             </Button>
         </div>
 

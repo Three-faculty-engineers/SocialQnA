@@ -45,16 +45,18 @@ function Community(props: Props) {
 
     return (
         <Container>
-        <Row>        
-            <h1>{props.community.title}</h1>
-            <h2>{props.community.description}</h2>
+        <Row className='shadow my-3 border-white  gap-3'>   
+            <h1 className='p-3 border-bottom'>{props.community.title}</h1>
+            <h3 className='p-3'>{props.community.description}</h3>
         </Row>
         <Row className="mt-5">
         <Col md={1} lg={1} xs={12}>
         </Col>
-        <Col md={10} lg={10} xs={12}>
+        <Col md={10} lg={10} xs={12} >
             {posts.length ? postsElements : (
-                <h5>Community je prazan</h5>
+            <div className="shadow p-3 mb-5 bg-white rounded">
+                <h3 className="text-center">Trenutno nema nijedan post</h3>
+            </div>
             )}
         </Col>
         <Col md={1} lg={1} xs={12}>
@@ -62,7 +64,7 @@ function Community(props: Props) {
         </Row>
         <Row>
          <div className="d-flex justify-content-center">
-            <CreatePost OnCreate={() => {getPosts()}} />
+            <CreatePost Community={props.community} OnCreate={() => {getPosts()}} />
           </div>
         </Row>
     </Container>

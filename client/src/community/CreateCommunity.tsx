@@ -4,8 +4,10 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
 import { CommunityDto } from './community.dto';
+import { followCommunity } from '../service/user.service';
 
 interface Props {
+  auth: any;
   OnCreate?: () => void;
 }
 
@@ -31,14 +33,19 @@ function CreateCommunity(props: Props) {
       
       if(!result.success)
       {
-        alert("Something goes wrong. Please try again");
+        alert("Something went wrong. Please try again");
         return;
       }
 
       alert("Successfully created community");
-
+      if(props.auth.id)
+      { 
+        const newCommunity: CommunityDto = result.data;
+        await followCommunity({userID: props.auth.id, communityID:newCommunity.id});
+      }
       if(props.OnCreate)
       {
+        setIsModalOpen(false);
         props.OnCreate();
       }
 

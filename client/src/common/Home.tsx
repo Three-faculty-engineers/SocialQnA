@@ -100,7 +100,7 @@ export default function Home(props: Props)
               </div>
               
               <div className="shadow p-3 mb-5 bg-white rounded">
-                <CreateCommunity/>
+                <CreateCommunity OnCreate={() => { getUserFollowedCommunities()}} auth={props.auth}/>
                 <h5>Followed Communities:</h5>
                 {followedCommunities}
               </div>
