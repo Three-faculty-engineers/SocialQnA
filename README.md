@@ -9,4 +9,4 @@ Front-end: React.js with TypeScript, html, css.
 
 Non-relational Databases: Neo4j, Redis.
 
-Application description: Ligth version replicate of Quora for faculty project.
+Application description: Light version replicate of Quora for faculty project.
