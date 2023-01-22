@@ -67,11 +67,12 @@ function CommunityPage(props: Props) {
 
     useEffect(() => {
         getCommunity();
+        getFollowInfo();
     }, []);
 
     useEffect(() => {
       getFollowInfo();
-    }, [props.auth]);
+    }, [props.auth, community]);
 
     return (
         <Container>

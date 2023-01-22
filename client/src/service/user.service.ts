@@ -15,9 +15,10 @@ export async function get(id: string)
 
 export async function update(payload: UserUpdateDto)
 {
-    const result = await fetchResult(`${BASE_URL}/${payload.id}`, {
+    const {id, ...rest} = payload;
+    const result = await fetchResult(`${BASE_URL}/${id}`, {
         method: "PUT",
-        payload,
+        payload: rest,
         token: localStorage.getItem("token") as string | undefined
     })
 

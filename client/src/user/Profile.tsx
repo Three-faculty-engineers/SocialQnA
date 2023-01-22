@@ -37,7 +37,9 @@ export function Profile(props: Props) {
 
     async function getPosts()
     {
-        const data = await getByUserID(id!);
+        if(!id) return;
+
+        const data = await getByUserID(id);
         if(!data.success)
         {
             return;
@@ -45,6 +47,7 @@ export function Profile(props: Props) {
         setPosts(data.data);
 
     }
+
     function addPost(post: PostDto)
     {
         setPosts([...posts, post]);
@@ -57,8 +60,11 @@ export function Profile(props: Props) {
 
     useEffect(() => {
         getUser();
-        getPosts();
     }, []);
+
+    useEffect(() => {
+        getPosts();
+    }, [props.auth]);
 
     const postsElements: JSX.Element[] = [];
     posts.forEach((post, index) => postsElements.push(<Post post={post} key={index} userID={props.auth.id} OnRemove={() => {removePost(post)} }></Post>));

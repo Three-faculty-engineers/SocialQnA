@@ -16,7 +16,7 @@ export default function NavbarMain(props: Props) {
   }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="white" expand="lg">
       <Container>
         <Navbar.Brand href="/">SocialQnA</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
