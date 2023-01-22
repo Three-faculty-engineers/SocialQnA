@@ -33,13 +33,6 @@ export class PostService extends BaseService {
     {
         const session = this.neo4jDriver.session();
 
-        // const query = `
-        // MATCH (c: Communities) -[:has_post]-> (n: Posts {id: $id}) <-[:posted]- (u: Users)
-        // OPTIONAL MATCH (n: Posts {id: $id}) <-[l:likes]- (ul:Users)
-        // OPTIONAL MATCH (n: Posts {id: $id}) <-[d:dislikes]- (ud:Users) 
-        // WITH n, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
-        // RETURN n{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`
-
         const query = `
         MATCH (c: Communities) -[:has_post]-> (n: Posts {id: $id}) <-[:posted]- (u: Users)
         WITH n, u, c
@@ -108,7 +101,7 @@ export class PostService extends BaseService {
         MATCH (u: Users {id: $userID}) -[:posted]-> (p: Posts) <-[:has_post]- (c: Communities)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        WITH p, count(distinct d) as dislikeCount, count(distinct l) as likeCount, u, collect(distinct ul.id) as userLikes, collect(distinct ud.id) as userDislikes, c
         RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`
 
         const result = (await session.run(query, {userID})).records.map(record => record["_fields"][0]);
@@ -126,7 +119,7 @@ export class PostService extends BaseService {
         MATCH (c: Communities {id: $communityID}) -[:has_post]-> (p: Posts) <-[:posted]- (u: Users)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, u, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        WITH p, count(distinct d) as dislikeCount, count(distinct l) as likeCount, u, collect(distinct ul.id) as userLikes, collect(distinct ud.id) as userDislikes, c
         RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: u{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`
         const result = (await session.run(query, {communityID})).records.map(record => record["_fields"][0]);
 
@@ -165,7 +158,7 @@ export class PostService extends BaseService {
         -[:posted]-> (p: Posts) <-[:has_post]- (c: Communities)
         OPTIONAL MATCH (p) <-[l:likes]- (ul:Users)
         OPTIONAL MATCH (p) <-[d:dislikes]- (ud:Users)
-        WITH p, count(d) as dislikeCount, count(l) as likeCount, uf, collect(ul.id) as userLikes, collect(ud.id) as userDislikes, c
+        WITH p, count(distinct d) as dislikeCount, count(distinct l) as likeCount, uf, collect(distinct ul.id) as userLikes, collect(distinct ud.id) as userDislikes, c
         RETURN p{.*, likes: likeCount, dislikes: dislikeCount, user: uf{.username, .id}, userLikes: userLikes, userDislikes: userDislikes, community: c{.id, .title}}`;
 
         let result = (await session.run(query, {id})).records.map(record => record["_fields"][0]);

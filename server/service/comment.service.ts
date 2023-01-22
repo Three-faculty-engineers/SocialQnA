@@ -32,7 +32,7 @@ export class CommentService extends BaseService
         WHERE p.id = $postID
         OPTIONAL MATCH (ul:Users) -[l:likes]-> (c)
         OPTIONAL MATCH (ud:Users) -[d:dislikes]-> (c)
-        WITH u,c,p, count(d) as dislikeCount, count(l) as likeCount, collect(ul.id) as userLikes, collect(ud.id) as userDislikes
+        WITH u,c,p, count(distinct d) as dislikeCount, count(distinct l) as likeCount, collect(distinct ul.id) as userLikes, collect(distinct ud.id) as userDislikes
         RETURN {comment: c{.id, .text, .timeStamp}, user: u{.username, .id}, likes: likeCount, dislikes: dislikeCount,  userLikes: userLikes, userDislikes: userDislikes }
         `;
         const result = (await session.run(query, {postID})).records.map(record => record["_fields"][0]);
