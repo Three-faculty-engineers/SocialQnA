@@ -3,7 +3,7 @@ NEO4J + REDIS
 
 Application type: Web application
 
-Back-end: Node/Express.js with TypesScript
+Back-end: Express.js with TypesScript
 
 Front-end: React.js with TypeScript, html, css.
 
